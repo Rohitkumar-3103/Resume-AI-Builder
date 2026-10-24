@@ -71,16 +71,6 @@ const Login = ({ onLogin }) => {
       <div className="auth-card-container">
         <div className="auth-card">
           <div className="auth-card-header">
-            <Link to="/" className="auth-brand-link" title="Return to Home">
-              <div className="auth-logo-glow-wrap">
-                <img src="/resumecraft.png" alt="ResumeCraft" className="auth-brand-logo" />
-              </div>
-            </Link>
-
-            <div className="auth-kicker-badge">
-              <span className="kicker-dot" /> NEXT-GEN AI RESUME ENGINE
-            </div>
-
             {/* Segmented Mode Switcher */}
             <div className="auth-nav-tabs">
               <Link to="/login" className="auth-nav-tab active">
@@ -95,29 +85,6 @@ const Login = ({ onLogin }) => {
             <p className="auth-card-subtitle">
               Sign in to manage your resumes, AI optimizations, and cover letters.
             </p>
-          </div>
-
-          {/* 1-Click Instant Demo Login Banner */}
-          <div className="auth-demo-banner">
-            <div className="demo-banner-content">
-              <span className="demo-bolt">⚡</span>
-              <div>
-                <div className="demo-title">1-Click Instant Demo Access</div>
-                <div className="demo-sub">Explore full workspace with sample portfolio (Alex Rivera)</div>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleDemoLogin}
-              disabled={loading}
-              className="demo-login-btn"
-            >
-              {loading && email === "alex@example.com" ? "Launching..." : "Try Demo →"}
-            </button>
-          </div>
-
-          <div className="auth-divider">
-            <span>Or continue with email</span>
           </div>
 
           {error && (

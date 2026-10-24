@@ -805,12 +805,24 @@ const CoverPageBuilder = () => {
                     ))}
                   </div>
                   <div className="custom-color-input-wrap">
-                    <input
-                      type="color"
-                      value={formData.accentColor}
-                      onChange={(e) => handleChange("accentColor", e.target.value)}
-                      className="color-wheel-input"
-                    />
+                    <label
+                      className={`custom-color-picker-wrapper ${!COLOR_PRESETS.some(p => p.hex.toLowerCase() === formData.accentColor?.toLowerCase()) ? "selected" : ""}`}
+                      style={{
+                        backgroundColor: formData.accentColor,
+                        ...(!COLOR_PRESETS.some(p => p.hex.toLowerCase() === formData.accentColor?.toLowerCase()) ? {
+                          borderColor: "var(--bg-card)",
+                          boxShadow: `0 0 0 3px ${formData.accentColor}`
+                        } : {})
+                      }}
+                      title="Custom Color Picker"
+                    >
+                      <input
+                        type="color"
+                        value={formData.accentColor}
+                        onChange={(e) => handleChange("accentColor", e.target.value)}
+                      />
+                      <span className="picker-icon">🎨</span>
+                    </label>
                     <input
                       type="text"
                       value={formData.accentColor}

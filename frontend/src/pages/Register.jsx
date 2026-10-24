@@ -81,16 +81,6 @@ const Register = ({ onLogin }) => {
       <div className="auth-card-container">
         <div className="auth-card">
           <div className="auth-card-header">
-            <Link to="/" className="auth-brand-link" title="Return to Home">
-              <div className="auth-logo-glow-wrap">
-                <img src="/resumecraft.png" alt="ResumeCraft" className="auth-brand-logo" />
-              </div>
-            </Link>
-
-            <div className="auth-kicker-badge">
-              <span className="kicker-dot" /> NEXT-GEN AI RESUME ENGINE
-            </div>
-
             {/* Segmented Mode Switcher */}
             <div className="auth-nav-tabs">
               <Link to="/login" className="auth-nav-tab">
