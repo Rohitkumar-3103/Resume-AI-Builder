@@ -439,26 +439,27 @@ const ResumeForm = ({ resumeData, setResumeData, onOpenAIDetector }) => {
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label>Full Name</label>
-                    <input
-                      type="text"
-                      name="fullName"
-                      value={resumeData.personalInfo.fullName}
-                      onChange={handlePersonalChange}
-                      placeholder="e.g. John Doe"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Job Title / Headline</label>
-                    <input
-                      type="text"
-                      name="jobTitle"
-                      value={resumeData.personalInfo.jobTitle}
-                      onChange={handlePersonalChange}
-                      placeholder="e.g. Senior Software Engineer"
-                    />
+                  <div className="form-group-row">
+                    <div className="form-group">
+                      <label>Full Name</label>
+                      <input
+                        type="text"
+                        name="fullName"
+                        value={resumeData.personalInfo.fullName}
+                        onChange={handlePersonalChange}
+                        placeholder="e.g. John Doe"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Job Title / Headline</label>
+                      <input
+                        type="text"
+                        name="jobTitle"
+                        value={resumeData.personalInfo.jobTitle}
+                        onChange={handlePersonalChange}
+                        placeholder="e.g. Senior Software Engineer"
+                      />
+                    </div>
                   </div>
 
                   <div className="form-group-row">
@@ -500,9 +501,14 @@ const ResumeForm = ({ resumeData, setResumeData, onOpenAIDetector }) => {
               {/* SUMMARY SECTION */}
               {sec.id === "summary" && (
                 <div className="form-group">
-                  <div className="flex justify-between items-center" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem", flexWrap: "wrap", gap: "0.5rem" }}>
-                    <label style={{ marginBottom: 0 }}>Professional Summary</label>
-                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.65rem", flexWrap: "wrap", gap: "0.75rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                      <label style={{ margin: 0 }}>Professional Summary</label>
+                      <span className="word-count-badge">
+                        {(resumeData.summary || "").trim().split(/\s+/).filter(Boolean).length} words
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
                       <button
                         type="button"
                         onClick={handleScanSummary}

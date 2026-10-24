@@ -521,10 +521,7 @@ const AIDetectorModal = ({
 
         {/* Modal Footer */}
         <div className="ai-modal-footer">
-          <div className="ai-footer-info">
-            <span>Powered by Gemini AI • ATS & Turnitin-Style Linguistic Heuristics</span>
-          </div>
-          <div className="ai-footer-buttons">
+          <div className="ai-footer-buttons" style={{ marginLeft: "auto" }}>
             <button type="button" className="ai-footer-close" onClick={onClose}>
               Close
             </button>
