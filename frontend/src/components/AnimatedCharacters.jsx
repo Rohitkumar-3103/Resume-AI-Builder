@@ -132,7 +132,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         <div className="lamp-rim-opening" />
         <div className="lamp-bulb" />
         <div className="lamp-bulb-glow" />
-        <div className="lamp-beam" />
+        {isLampOn && <div className="lamp-beam" />}
         <div className="lamp-pull-cord" onClick={handleToggleLamp}>
           <div className="cord-wire" />
           <div className="cord-ball" />
@@ -140,7 +140,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
       </div>
 
       {/* Glowing stage floor reflection */}
-      <div className={`floor-glow ${isLampOn ? "floor-glow-active" : ""}`} />
+      {isLampOn && <div className="floor-glow floor-glow-active" />}
 
       <svg
         viewBox="0 0 460 400"
