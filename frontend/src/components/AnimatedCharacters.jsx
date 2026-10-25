@@ -16,58 +16,62 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
   const [pupilOffset, setPupilOffset] = useState({ x: 0, y: 0 });
   const [yellowBeakAngle, setYellowBeakAngle] = useState(0);
   const [yellowBodyTilt, setYellowBodyTilt] = useState(0);
+  const [purpleTilt, setPurpleTilt] = useState(0);
+  const [pinkTilt, setPinkTilt] = useState(0);
+  const [orangeTilt, setOrangeTilt] = useState(0);
   const [isBlinking, setIsBlinking] = useState(false);
 
-  // Real-time mouse tracking logic for eyes & yellow character motion
+  // Real-time mouse tracking logic for all 4 characters (YouTube reference)
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height * 0.5;
+      const centerY = rect.top + rect.height * 0.48;
 
       // When celebrating/loading, look straight forward/upward happily
       if (isLoading) {
         setPupilOffset({ x: 0, y: -3 });
         setYellowBeakAngle(-12);
         setYellowBodyTilt(0);
+        setPurpleTilt(0);
+        setPinkTilt(0);
+        setOrangeTilt(0);
         return;
       }
 
-      // 1. Password state: eyes shy away / yellow dips beak
+      // Password hidden state: eyes shy away / yellow dips beak
       if (activeField === "password" && !isPasswordShown) {
         setPupilOffset({ x: -4, y: 6 });
         setYellowBeakAngle(14); // beak tilts downward shyly
         setYellowBodyTilt(3);
+        setPurpleTilt(-1.5);
+        setPinkTilt(-3);
+        setOrangeTilt(1);
         return;
       }
 
-      // 2. Email / Name state: all glance towards form
-      if (activeField === "email" || activeField === "name") {
-        setPupilOffset({ x: 7, y: 3 });
-        setYellowBeakAngle(-6); // beak tilts up toward input
-        setYellowBodyTilt(-2);
-        return;
-      }
-
-      // 3. Normal mouse tracking
+      // Real-time mouse cursor tracking across the entire viewport
       const dx = e.clientX - centerX;
       const dy = e.clientY - centerY;
       const angle = Math.atan2(dy, dx);
-      const dist = Math.min(Math.hypot(dx, dy) / 60, 1);
-      const maxRadius = 6.5;
+      const dist = Math.min(Math.hypot(dx, dy) / 80, 1);
+      const maxRadius = 6.8;
 
       setPupilOffset({
         x: Math.cos(angle) * maxRadius * dist,
         y: Math.sin(angle) * maxRadius * dist
       });
 
-      // Yellow character motion: tilts and beak rotates like seesaw
+      // 4 Characters dynamic body tilts & seesaw beak motion following mouse
       const normX = Math.max(-1, Math.min(1, dx / (window.innerWidth / 2)));
       const normY = Math.max(-1, Math.min(1, dy / (window.innerHeight / 2)));
 
-      setYellowBodyTilt(normX * 6);
-      setYellowBeakAngle(normY * 18);
+      setYellowBodyTilt(normX * 8);
+      setYellowBeakAngle(normY * 20);
+      setPurpleTilt(normX * 4);
+      setPinkTilt(normX * 6);
+      setOrangeTilt(normX * 3.5);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -82,6 +86,25 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
     }, 3800);
     return () => clearInterval(interval);
   }, []);
+
+  // Idle autonomous random looking around (YouTube reference)
+  useEffect(() => {
+    const randomGlance = () => {
+      if (activeField === "password" && !isPasswordShown) return;
+      if (isLoading) return;
+      const rx = (Math.random() - 0.5) * 8;
+      const ry = (Math.random() - 0.5) * 6;
+      setPupilOffset({ x: rx, y: ry });
+      setYellowBeakAngle((Math.random() - 0.5) * 12);
+      setYellowBodyTilt((Math.random() - 0.5) * 6);
+      setPurpleTilt((Math.random() - 0.5) * 3);
+      setPinkTilt((Math.random() - 0.5) * 4);
+      setOrangeTilt((Math.random() - 0.5) * 3);
+    };
+
+    const interval = setInterval(randomGlance, 4200);
+    return () => clearInterval(interval);
+  }, [activeField, isPasswordShown, isLoading]);
 
   const isCoveringEyes = activeField === "password" && !isPasswordShown && !isLoading;
   const isPeeking = activeField === "password" && isPasswordShown && !isLoading;
@@ -103,7 +126,6 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         <div className="lamp-bulb" />
         <div className="lamp-bulb-glow" />
         <div className="lamp-beam" />
-        <div className="lamp-ambient-glow" />
         <div className="lamp-pull-cord">
           <div className="cord-wire" />
           <div className="cord-ball" />
@@ -161,7 +183,14 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         {/* ========================================================
             1. PURPLE CHARACTER (Tall, Central Pillar)
             ======================================================== */}
-        <g className={`char-purple ${isCoveringEyes ? "hiding" : ""} ${isLoading ? "celebrating" : ""}`}>
+        <g
+          className={`char-purple ${isCoveringEyes ? "hiding" : ""} ${isLoading ? "celebrating" : ""}`}
+          style={{
+            transformOrigin: "192px 400px",
+            transform: `rotate(${purpleTilt}deg)`,
+            transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
+          }}
+        >
           {/* Body */}
           <rect
             x="130"
@@ -372,7 +401,14 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         {/* ========================================================
             2. PINK CHARACTER (Slender, Curious Pillar)
             ======================================================== */}
-        <g className={`char-pink ${isCoveringEyes ? "shy" : ""} ${isLoading ? "celebrating" : ""}`}>
+        <g
+          className={`char-pink ${isCoveringEyes ? "shy" : ""} ${isLoading ? "celebrating" : ""}`}
+          style={{
+            transformOrigin: "276px 400px",
+            transform: `rotate(${pinkTilt}deg)`,
+            transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
+          }}
+        >
           {/* Body */}
           <rect
             x="245"
@@ -513,7 +549,14 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         {/* ========================================================
             4. ORANGE CHARACTER (Wide, Happy Round Blob at Front)
             ======================================================== */}
-        <g className={`char-orange ${isLoading ? "celebrating" : ""}`}>
+        <g
+          className={`char-orange ${isLoading ? "celebrating" : ""}`}
+          style={{
+            transformOrigin: "160px 400px",
+            transform: `rotate(${orangeTilt}deg) scale(${1 + Math.abs(orangeTilt) * 0.015}, ${1 - Math.abs(orangeTilt) * 0.015})`,
+            transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
+          }}
+        >
           {/* Body */}
           <path
             d="M 60 400 C 60 270, 180 270, 240 330 C 260 350, 260 400, 260 400 Z"

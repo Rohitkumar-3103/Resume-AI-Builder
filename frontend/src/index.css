@@ -387,6 +387,45 @@ body.light-theme .theme-toggle-btn {
   gap: 0.75rem;
 }
 
+/* Modern Pill Button for Sign In in Navbar (Image 4) */
+.nav-link-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(135deg, rgba(0, 255, 195, 0.12), rgba(37, 99, 235, 0.12));
+  border: 1px solid rgba(0, 255, 195, 0.45);
+  color: #38ffd0;
+  box-shadow: 0 0 12px rgba(0, 255, 195, 0.18);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-link-login:hover {
+  background: linear-gradient(135deg, #00ffc3 0%, #00d9a6 100%);
+  color: #042f26;
+  border-color: #00ffc3;
+  box-shadow: 0 0 20px rgba(0, 255, 195, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px) scale(1.03);
+}
+
+body.light-theme .nav-link-login {
+  background: linear-gradient(100deg, #0d9488 0%, #059669 100%);
+  border: 1px solid transparent;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
+}
+
+body.light-theme .nav-link-login:hover {
+  background: linear-gradient(100deg, #0f766e 0%, #047857 100%);
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.38);
+  transform: translateY(-1px) scale(1.03);
+  color: #ffffff;
+}
+
 .navbar-button-primary {
   display: inline-flex;
   align-items: center;
@@ -9815,24 +9854,7 @@ body.light-theme .template-modal-body {
   animation: authCardEnter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Glossy glass diagonal highlight from Image 1, 4 & 5 */
-.char-auth-card::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  right: -25%;
-  width: 75%;
-  height: 150%;
-  background: linear-gradient(
-    135deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.12),
-    transparent 70%
-  );
-  transform: rotate(12deg);
-  pointer-events: none;
-  z-index: 2;
-}
+
 
 @keyframes authCardEnter {
   from {
@@ -10033,28 +10055,7 @@ body.light-theme .template-modal-body {
   opacity: 0;
 }
 
-/* Ambient Radial Glow Halo illuminating all 4 characters */
-.lamp-ambient-glow {
-  position: absolute;
-  top: 70px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 450px;
-  height: 390px;
-  background: radial-gradient(
-    ellipse at 50% 15%,
-    rgba(0, 255, 195, 0.28) 0%,
-    rgba(0, 255, 195, 0.1) 50%,
-    transparent 80%
-  );
-  pointer-events: none;
-  z-index: 3;
-  transition: opacity 0.35s ease;
-}
 
-.stage-lamp.lamp-off .lamp-ambient-glow {
-  opacity: 0;
-}
 
 /* Pull cord from Image 3, 4 & 5 */
 .lamp-pull-cord {

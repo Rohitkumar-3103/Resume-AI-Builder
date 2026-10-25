@@ -106,7 +106,7 @@ const Navbar = ({ token, onLogout, theme, onToggleTheme }) => {
                 <span className="theme-icon">{theme === "dark" ? "☀️" : "🌙"}</span>
                 <span className="theme-text">{theme === "dark" ? "Light" : "Dark"}</span>
               </button>
-              <Link to="/login" className="navbar-item nav-link-login">Sign In</Link>
+              <Link to="/login" className="nav-link-login">Sign In</Link>
             </div>
           )}
 
