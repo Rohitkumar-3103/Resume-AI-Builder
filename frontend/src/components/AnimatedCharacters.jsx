@@ -109,14 +109,21 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
   const isCoveringEyes = activeField === "password" && !isPasswordShown && !isLoading;
   const isPeeking = activeField === "password" && isPasswordShown && !isLoading;
   const [isLampOn, setIsLampOn] = useState(true);
+  const [isPullingCord, setIsPullingCord] = useState(false);
+
+  const handleToggleLamp = () => {
+    setIsPullingCord(true);
+    setTimeout(() => setIsPullingCord(false), 240);
+    setIsLampOn(prev => !prev);
+  };
 
   return (
     <div className={`char-stage-wrapper ${isLoading ? "is-loading-celebration" : ""} ${isLampOn ? "lamp-illuminated" : "lamp-dimmed"}`} ref={containerRef}>
-      {/* Hanging 3D Conical Lamp with Tucked-in Bright Bulb (Image 5) */}
+      {/* Hanging 3D Conical Lamp with Tucked-in Bright Bulb (Image 5) - Slides down first */}
       <div
-        className={`stage-lamp ${isLampOn ? "lamp-on" : "lamp-off"}`}
-        onClick={() => setIsLampOn(!isLampOn)}
-        title="Click to toggle lamp illumination"
+        className={`stage-lamp ${isLampOn ? "lamp-on" : "lamp-off"} ${isPullingCord ? "cord-pull-active" : ""}`}
+        onClick={handleToggleLamp}
+        title="Click lamp or pull cord to toggle illumination"
       >
         <div className="lamp-wire" />
         <div className="lamp-cap-top" />
@@ -126,7 +133,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         <div className="lamp-bulb" />
         <div className="lamp-bulb-glow" />
         <div className="lamp-beam" />
-        <div className="lamp-pull-cord">
+        <div className="lamp-pull-cord" onClick={handleToggleLamp}>
           <div className="cord-wire" />
           <div className="cord-ball" />
         </div>
@@ -181,16 +188,18 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         )}
 
         {/* ========================================================
-            1. PURPLE CHARACTER (Tall, Central Pillar)
+            1. PURPLE CHARACTER (Tall, Central Pillar - Slides up second)
             ======================================================== */}
-        <g
-          className={`char-purple ${isCoveringEyes ? "hiding" : ""} ${isLoading ? "celebrating" : ""}`}
-          style={{
-            transformOrigin: "192px 400px",
-            transform: `rotate(${purpleTilt}deg)`,
-            transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
-          }}
-        >
+        <g className="char-purple-entrance">
+          <g className="char-purple-alive">
+            <g
+              className={`char-purple ${isCoveringEyes ? "hiding" : ""} ${isLoading ? "celebrating" : ""}`}
+              style={{
+                transformOrigin: "192px 400px",
+                transform: `rotate(${purpleTilt}deg)`,
+                transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
+              }}
+            >
           {/* Body */}
           <rect
             x="130"
@@ -396,19 +405,23 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
               />
             </g>
           ) : null}
+            </g>
+          </g>
         </g>
 
         {/* ========================================================
-            2. PINK CHARACTER (Slender, Curious Pillar)
+            2. PINK CHARACTER (Slender, Curious Pillar - Slides up second)
             ======================================================== */}
-        <g
-          className={`char-pink ${isCoveringEyes ? "shy" : ""} ${isLoading ? "celebrating" : ""}`}
-          style={{
-            transformOrigin: "276px 400px",
-            transform: `rotate(${pinkTilt}deg)`,
-            transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
-          }}
-        >
+        <g className="char-pink-entrance">
+          <g className="char-pink-alive">
+            <g
+              className={`char-pink ${isCoveringEyes ? "shy" : ""} ${isLoading ? "celebrating" : ""}`}
+              style={{
+                transformOrigin: "276px 400px",
+                transform: `rotate(${pinkTilt}deg)`,
+                transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
+              }}
+            >
           {/* Body */}
           <rect
             x="245"
@@ -481,18 +494,22 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
             )}
           </g>
         </g>
+          </g>
+        </g>
 
         {/* ========================================================
-            3. YELLOW CHARACTER (Right Rounded Dome with dynamic motion & seesaw beak)
+            3. YELLOW CHARACTER (Right Rounded Dome - Slides up second)
             ======================================================== */}
-        <g
-          className={`char-yellow ${isLoading ? "celebrating" : ""}`}
-          style={{
-            transformOrigin: "340px 400px",
-            transform: `rotate(${yellowBodyTilt}deg)`,
-            transition: "transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1)"
-          }}
-        >
+        <g className="char-yellow-entrance">
+          <g className="char-yellow-alive">
+            <g
+              className={`char-yellow ${isLoading ? "celebrating" : ""}`}
+              style={{
+                transformOrigin: "340px 400px",
+                transform: `rotate(${yellowBodyTilt}deg)`,
+                transition: "transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1)"
+              }}
+            >
           {/* Body */}
           <rect
             x="300"
@@ -544,19 +561,23 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
               />
             </g>
           </g>
+            </g>
+          </g>
         </g>
 
         {/* ========================================================
-            4. ORANGE CHARACTER (Wide, Happy Round Blob at Front)
+            4. ORANGE CHARACTER (Wide, Happy Round Blob - Slides up second)
             ======================================================== */}
-        <g
-          className={`char-orange ${isLoading ? "celebrating" : ""}`}
-          style={{
-            transformOrigin: "160px 400px",
-            transform: `rotate(${orangeTilt}deg) scale(${1 + Math.abs(orangeTilt) * 0.015}, ${1 - Math.abs(orangeTilt) * 0.015})`,
-            transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
-          }}
-        >
+        <g className="char-orange-entrance">
+          <g className="char-orange-alive">
+            <g
+              className={`char-orange ${isLoading ? "celebrating" : ""}`}
+              style={{
+                transformOrigin: "160px 400px",
+                transform: `rotate(${orangeTilt}deg) scale(${1 + Math.abs(orangeTilt) * 0.015}, ${1 - Math.abs(orangeTilt) * 0.015})`,
+                transition: "transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1)"
+              }}
+            >
           {/* Body */}
           <path
             d="M 60 400 C 60 270, 180 270, 240 330 C 260 350, 260 400, 260 400 Z"
@@ -624,6 +645,8 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
                 />
               </>
             )}
+          </g>
+            </g>
           </g>
         </g>
       </svg>
