@@ -80,22 +80,22 @@ const Login = ({ onLogin }) => {
             RIGHT COLUMN: CLEAN LOGIN FORM (Matching Video Design)
             ======================================================== */}
         <div className="char-auth-form-side">
-          {/* Top Geometric Prism Logo */}
+          {/* Top Geometric Prism Delta Logo (Animated) */}
           <Link to="/" className="char-auth-logo-link" title="ResumeCraft">
             <svg
               className="char-auth-geometric-logo"
-              viewBox="0 0 36 36"
+              viewBox="0 0 40 40"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M18 3L32 10.5V25.5L18 33L4 25.5V10.5L18 3Z" fill="currentColor" fillOpacity="0.9" />
-              <path d="M18 3L32 10.5L18 18L4 10.5L18 3Z" fill="#ffffff" fillOpacity="0.25" />
-              <path d="M18 18V33L4 25.5V10.5L18 18Z" fill="#000000" fillOpacity="0.18" />
+              {/* Modern Folded Delta Prism matching YouTube reference */}
+              <path d="M20 4L36 32H28L20 18L12 32H4L20 4Z" fill="currentColor" fillOpacity="0.9" />
+              <path d="M20 4L28 32H20L15 22L20 4Z" fill="#ffffff" fillOpacity="0.35" />
+              <path d="M20 18L28 32H12L20 18Z" fill="#000000" fillOpacity="0.22" />
             </svg>
           </Link>
 
           <h1 className="char-auth-title">Welcome back!</h1>
-          <p className="char-auth-subtitle">Please enter your details</p>
 
           {error && (
             <div className="char-auth-error-alert">
@@ -167,7 +167,7 @@ const Login = ({ onLogin }) => {
               </div>
             </div>
 
-            {/* Remember Me & Forgot Password */}
+            {/* Remember Me */}
             <div className="char-auth-row">
               <label className="char-checkbox-label">
                 <input
@@ -177,13 +177,6 @@ const Login = ({ onLogin }) => {
                 />
                 <span>Remember me</span>
               </label>
-              <button
-                type="button"
-                className="char-forgot-link"
-                onClick={() => handleDemoOrGoogleLogin("Demo User", "alex@example.com")}
-              >
-                1-Click Demo?
-              </button>
             </div>
 
             {/* Primary Log In Pill Button */}

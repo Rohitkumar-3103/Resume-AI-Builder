@@ -2,61 +2,77 @@ import React, { useState, useEffect, useRef } from "react";
 
 /**
  * AnimatedCharacters Component
- * Features 4 expressive characters (Purple, Pink, Orange, Yellow) inspired by the interactive login animation.
+ * Features 4 expressive characters (Purple, Pink, Orange, Yellow) faithfully matching the YouTube reference video.
  * Features:
- * - Real-time pupil tracking of mouse position
- * - Reactive states when Email is focused (all characters glance right)
- * - Reactive states when Password is focused (characters shy away / cover eyes)
- * - Peeking behavior when Show Password is toggled
+ * - Real-time pupil tracking across all characters via Math.atan2
+ * - Yellow character with dynamic body sway & beak seesaw rotation following cursor
+ * - Purple character that lifts arms and covers eyes when typing password
+ * - Peeking behavior when password visibility is toggled
  * - Natural periodic blinking
+ * - Idle breathing and organic physics
  */
 const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
   const containerRef = useRef(null);
   const [pupilOffset, setPupilOffset] = useState({ x: 0, y: 0 });
+  const [yellowBeakAngle, setYellowBeakAngle] = useState(0);
+  const [yellowBodyTilt, setYellowBodyTilt] = useState(0);
   const [isBlinking, setIsBlinking] = useState(false);
 
-  // Mouse tracking logic
+  // Real-time mouse tracking logic for eyes & yellow character motion
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height * 0.45;
+      const centerY = rect.top + rect.height * 0.5;
 
-      // When password is active and hidden, look down/shy away
+      // 1. Password state: eyes shy away / yellow dips beak
       if (activeField === "password" && !isPasswordShown) {
         setPupilOffset({ x: -4, y: 6 });
+        setYellowBeakAngle(14); // beak tilts downward shyly
+        setYellowBodyTilt(3);
         return;
       }
 
-      // When email/name is active, look right toward the form
+      // 2. Email / Name state: all glance towards form
       if (activeField === "email" || activeField === "name") {
         setPupilOffset({ x: 7, y: 3 });
+        setYellowBeakAngle(-6); // beak tilts up toward input
+        setYellowBodyTilt(-2);
         return;
       }
 
+      // 3. Normal mouse tracking
       const dx = e.clientX - centerX;
       const dy = e.clientY - centerY;
       const angle = Math.atan2(dy, dx);
       const dist = Math.min(Math.hypot(dx, dy) / 60, 1);
-      const maxRadius = 6;
+      const maxRadius = 6.5;
 
       setPupilOffset({
         x: Math.cos(angle) * maxRadius * dist,
         y: Math.sin(angle) * maxRadius * dist
       });
+
+      // Yellow character motion: tilts and beak rotates like seesaw
+      // Normalized X (-1 to 1) and Y (-1 to 1)
+      const normX = Math.max(-1, Math.min(1, dx / (window.innerWidth / 2)));
+      const normY = Math.max(-1, Math.min(1, dy / (window.innerHeight / 2)));
+
+      setYellowBodyTilt(normX * 6); // body sways up to 6 degrees
+      setYellowBeakAngle(normY * 18); // beak rotates up to 18 degrees with vertical mouse motion
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [activeField, isPasswordShown]);
 
-  // Periodic blinking
+  // Periodic natural blinking
   useEffect(() => {
     const interval = setInterval(() => {
       setIsBlinking(true);
-      setTimeout(() => setIsBlinking(false), 180);
-    }, 3600);
+      setTimeout(() => setIsBlinking(false), 160);
+    }, 3800);
     return () => clearInterval(interval);
   }, []);
 
@@ -125,6 +141,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
                   cy={180 + pupilOffset.y}
                   r="4.5"
                   fill="#1e1b4b"
+                  style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
                 />
               )}
 
@@ -136,6 +153,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
                   cy={180 + pupilOffset.y}
                   r="4.5"
                   fill="#1e1b4b"
+                  style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
                 />
               )}
 
@@ -153,7 +171,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
             <g className="purple-shy-face">
               {isPeeking ? (
                 <>
-                  {/* Left eye peeking through paws */}
+                  {/* Left eye peeking through parted paws */}
                   <ellipse cx="170" cy="180" rx="8" ry="7" fill="#ffffff" />
                   <circle cx="172" cy="181" r="3.5" fill="#1e1b4b" />
                   <path
@@ -163,7 +181,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
                     strokeLinecap="round"
                     fill="none"
                   />
-                  {/* Surprised / curious mouth */}
+                  {/* Curious mouth */}
                   <ellipse cx="188" cy="198" rx="3.5" ry="4.5" fill="#4c1d95" />
                 </>
               ) : (
@@ -248,29 +266,38 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
             <ellipse cx="264" cy="225" rx="8" ry={isBlinking ? "1" : "8"} fill="#ffffff" />
             {!isBlinking && (
               <circle
-                cx={264 + (isCoveringEyes ? -3 : pupilOffset.x)}
-                cy={225 + (isCoveringEyes ? 4 : pupilOffset.y)}
+                cx={264 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
+                cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
                 r="4"
                 fill="#4c0519"
+                style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
               />
             )}
 
             <ellipse cx="288" cy="225" rx="8" ry={isBlinking ? "1" : "8"} fill="#ffffff" />
             {!isBlinking && (
               <circle
-                cx={288 + (isCoveringEyes ? -3 : pupilOffset.x)}
-                cy={225 + (isCoveringEyes ? 4 : pupilOffset.y)}
+                cx={288 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
+                cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
                 r="4"
                 fill="#4c0519"
+                style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
               />
             )}
           </g>
         </g>
 
         {/* ========================================================
-            3. YELLOW CHARACTER (Right Rounded Dome with beak)
+            3. YELLOW CHARACTER (Right Rounded Dome with dynamic motion & seesaw beak)
             ======================================================== */}
-        <g className="char-yellow">
+        <g
+          className="char-yellow"
+          style={{
+            transformOrigin: "340px 400px",
+            transform: `rotate(${yellowBodyTilt}deg)`,
+            transition: "transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1)"
+          }}
+        >
           {/* Body */}
           <rect
             x="300"
@@ -282,18 +309,36 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
             filter="url(#softGlow)"
           />
 
-          {/* Eyes / Face */}
+          {/* Face */}
           <g className="yellow-face">
-            {/* Eye */}
-            <ellipse cx="328" cy="270" rx="4" ry={isBlinking ? "0.5" : "4"} fill="#422006" />
-
-            {/* Horizontal Beak / Cute expression line */}
-            <path
-              d={isCoveringEyes ? "M 342 278 L 388 278" : "M 345 275 L 390 275"}
-              stroke="#1c1917"
-              strokeWidth="6"
-              strokeLinecap="round"
+            {/* Eye that tracks cursor */}
+            <ellipse
+              cx={328 + pupilOffset.x * 0.6}
+              cy={270 + pupilOffset.y * 0.6}
+              rx="4"
+              ry={isBlinking ? "0.5" : "4"}
+              fill="#422006"
+              style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
             />
+
+            {/* Dynamic Seesaw Beak / Expression line that rotates with motion */}
+            <g
+              style={{
+                transformOrigin: "345px 275px",
+                transform: `rotate(${yellowBeakAngle}deg)`,
+                transition: "transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1)"
+              }}
+            >
+              <line
+                x1="345"
+                y1="275"
+                x2="390"
+                y2="275"
+                stroke="#1c1917"
+                strokeWidth="6"
+                strokeLinecap="round"
+              />
+            </g>
           </g>
         </g>
 
@@ -318,6 +363,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
                   cy={335 + pupilOffset.y * 0.5}
                   r="2"
                   fill="#ffffff"
+                  style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
                 />
               </>
             ) : (
