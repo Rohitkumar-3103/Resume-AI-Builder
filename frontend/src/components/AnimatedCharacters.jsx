@@ -85,9 +85,30 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false })
 
   const isCoveringEyes = activeField === "password" && !isPasswordShown && !isLoading;
   const isPeeking = activeField === "password" && isPasswordShown && !isLoading;
+  const [isLampOn, setIsLampOn] = useState(true);
 
   return (
-    <div className={`char-stage-wrapper ${isLoading ? "is-loading-celebration" : ""}`} ref={containerRef}>
+    <div className={`char-stage-wrapper ${isLoading ? "is-loading-celebration" : ""} ${isLampOn ? "lamp-illuminated" : "lamp-dimmed"}`} ref={containerRef}>
+      {/* Hanging Lamp from Image 1 illuminating the characters */}
+      <div
+        className={`stage-lamp ${isLampOn ? "lamp-on" : "lamp-off"}`}
+        onClick={() => setIsLampOn(!isLampOn)}
+        title="Click to toggle lamp illumination"
+      >
+        <div className="lamp-wire" />
+        <div className="lamp-cap" />
+        <div className="lamp-shade" />
+        <div className="lamp-light" />
+        <div className="lamp-beam" />
+        <div className="lamp-pull-cord">
+          <div className="cord-wire" />
+          <div className="cord-ball" />
+        </div>
+      </div>
+
+      {/* Glowing stage floor reflection */}
+      <div className={`floor-glow ${isLampOn ? "floor-glow-active" : ""}`} />
+
       <svg
         viewBox="0 0 460 400"
         className="char-stage-svg"
