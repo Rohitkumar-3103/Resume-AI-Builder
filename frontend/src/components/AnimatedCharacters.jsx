@@ -89,7 +89,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
 
   return (
     <div className={`char-stage-wrapper ${isLoading ? "is-loading-celebration" : ""} ${isLampOn ? "lamp-illuminated" : "lamp-dimmed"}`} ref={containerRef}>
-      {/* Hanging Lamp from Image 1 & 3 illuminating the characters */}
+      {/* Hanging Lamp with Bright Glowing Bulb from Image 4 & 5 */}
       <div
         className={`stage-lamp ${isLampOn ? "lamp-on" : "lamp-off"}`}
         onClick={() => setIsLampOn(!isLampOn)}
@@ -98,7 +98,9 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         <div className="lamp-wire" />
         <div className="lamp-cap" />
         <div className="lamp-shade" />
-        <div className="lamp-light" />
+        <div className="lamp-bulb-socket" />
+        <div className="lamp-bulb" />
+        <div className="lamp-bulb-glow" />
         <div className="lamp-beam" />
         <div className="lamp-ambient-glow" />
         <div className="lamp-pull-cord">
@@ -182,27 +184,43 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
             /* Normal tracking eyes */
             <g className="purple-eyes">
               {/* Left Eye */}
-              <ellipse cx="170" cy="180" rx="9" ry={isBlinking ? "1" : "9"} fill="#ffffff" />
+              <ellipse cx="170" cy="180" rx="9.5" ry={isBlinking ? "1" : "9.5"} fill="#ffffff" />
               {!isBlinking && (
-                <circle
-                  cx={170 + pupilOffset.x}
-                  cy={180 + pupilOffset.y}
-                  r="4.5"
-                  fill="#1e1b4b"
-                  style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
-                />
+                <>
+                  <circle
+                    cx={170 + pupilOffset.x}
+                    cy={180 + pupilOffset.y}
+                    r="4.8"
+                    fill="#1e1b4b"
+                    style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                  />
+                  <circle
+                    cx={171.5 + pupilOffset.x * 0.85}
+                    cy={178 + pupilOffset.y * 0.85}
+                    r="1.8"
+                    fill="#ffffff"
+                  />
+                </>
               )}
 
               {/* Right Eye */}
-              <ellipse cx="205" cy="180" rx="9" ry={isBlinking ? "1" : "9"} fill="#ffffff" />
+              <ellipse cx="205" cy="180" rx="9.5" ry={isBlinking ? "1" : "9.5"} fill="#ffffff" />
               {!isBlinking && (
-                <circle
-                  cx={205 + pupilOffset.x}
-                  cy={180 + pupilOffset.y}
-                  r="4.5"
-                  fill="#1e1b4b"
-                  style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
-                />
+                <>
+                  <circle
+                    cx={205 + pupilOffset.x}
+                    cy={180 + pupilOffset.y}
+                    r="4.8"
+                    fill="#1e1b4b"
+                    style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                  />
+                  <circle
+                    cx={206.5 + pupilOffset.x * 0.85}
+                    cy={178 + pupilOffset.y * 0.85}
+                    r="1.8"
+                    fill="#ffffff"
+                  />
+                </>
               )}
 
               {/* Cute Smile / Mouth */}
@@ -225,38 +243,75 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
           ) : (
             /* Eyes closed shyly / hands covering / peeking */
             <g className="purple-shy-face">
+              {/* Cute Blushing Rosy Cheeks */}
+              <ellipse cx="150" cy="195" rx="8" ry="4.5" fill="#f43f5e" opacity="0.65" />
+              <ellipse cx="225" cy="195" rx="8" ry="4.5" fill="#f43f5e" opacity="0.65" />
+
               {isPeeking ? (
                 <>
-                  {/* Left eye peeking through parted paws */}
-                  <ellipse cx="170" cy="180" rx="8" ry="7" fill="#ffffff" />
-                  <circle cx={170 + pupilOffset.x * 0.5} cy={180 + pupilOffset.y * 0.5} r="3.5" fill="#1e1b4b" />
+                  {/* Cute Blushing Rosy Cheeks (Image 2) */}
+                  <ellipse cx="146" cy="195" rx="8.5" ry="5" fill="#f43f5e" opacity="0.8" />
+                  <ellipse cx="228" cy="195" rx="8.5" ry="5" fill="#f43f5e" opacity="0.8" />
+
+                  {/* Left Eye Wide Open & Looking (Image 2) */}
+                  <ellipse cx="170" cy="180" rx="9.5" ry="9.5" fill="#ffffff" />
+                  <circle
+                    cx={170 + (pupilOffset.x || 3.5)}
+                    cy={180 + (pupilOffset.y || -1)}
+                    r="4.8"
+                    fill="#1e1b4b"
+                    style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                  />
+                  <circle
+                    cx={171.8 + (pupilOffset.x || 3.5) * 0.85}
+                    cy={178 + (pupilOffset.y || -1) * 0.85}
+                    r="1.8"
+                    fill="#ffffff"
+                  />
+
+                  {/* Right Eye Wide Open & Looking (Image 2) */}
+                  <ellipse cx="205" cy="180" rx="9.5" ry="9.5" fill="#ffffff" />
+                  <circle
+                    cx={205 + (pupilOffset.x || 3.5)}
+                    cy={180 + (pupilOffset.y || -1)}
+                    r="4.8"
+                    fill="#1e1b4b"
+                    style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                  />
+                  <circle
+                    cx={206.8 + (pupilOffset.x || 3.5) * 0.85}
+                    cy={178 + (pupilOffset.y || -1) * 0.85}
+                    r="1.8"
+                    fill="#ffffff"
+                  />
+
+                  {/* Cute Happy Smile (Image 2) */}
                   <path
-                    d="M 197 181 Q 204 176 211 181"
-                    stroke="#ffffff"
-                    strokeWidth="3"
+                    d="M 182 198 Q 188 207 194 198"
+                    stroke="#1e1b4b"
+                    strokeWidth="3.2"
                     strokeLinecap="round"
                     fill="none"
                   />
-                  {/* Curious mouth */}
-                  <ellipse cx="188" cy="198" rx="3.5" ry="4.5" fill="#4c1d95" />
                 </>
               ) : (
                 <>
+                  {/* Both eyes closed shyly with curved lines (Image 1) */}
                   <path
-                    d="M 163 182 Q 170 176 177 182"
+                    d="M 163 181 Q 170 175 178 181"
                     stroke="#ffffff"
                     strokeWidth="3.5"
                     strokeLinecap="round"
                     fill="none"
                   />
                   <path
-                    d="M 198 182 Q 205 176 212 182"
+                    d="M 197 181 Q 204 175 212 181"
                     stroke="#ffffff"
                     strokeWidth="3.5"
                     strokeLinecap="round"
                     fill="none"
                   />
-                  <ellipse cx="188" cy="198" rx="4" ry="2" fill="#4c1d95" />
+                  <ellipse cx="188" cy="198" rx="4" ry="2.5" fill="#4c1d95" />
                 </>
               )}
             </g>
@@ -274,19 +329,19 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
               <circle cx="250" cy="125" r="12" fill="#8b5cf6" stroke="#6d28d9" strokeWidth="2" />
             </g>
           ) : (isCoveringEyes || isPeeking) ? (
-            /* Hands covering eyes when typing password */
+            /* Hands covering eyes when typing password (Image 1) or holding cheeks (Image 2) */
             <g className="purple-paws">
               {/* Left Arm & Paw */}
               <path
-                d={isPeeking ? "M 130 230 Q 138 205 150 192" : "M 130 230 Q 142 200 166 182"}
+                d={isPeeking ? "M 130 230 Q 138 212 148 198" : "M 130 230 Q 142 200 166 182"}
                 stroke="#7c3aed"
                 strokeWidth="18"
                 strokeLinecap="round"
                 fill="none"
               />
               <circle
-                cx={isPeeking ? 150 : 166}
-                cy={isPeeking ? 192 : 182}
+                cx={isPeeking ? 148 : 166}
+                cy={isPeeking ? 198 : 182}
                 r="12"
                 fill="#8b5cf6"
                 stroke="#6d28d9"
@@ -295,15 +350,15 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
 
               {/* Right Arm & Paw */}
               <path
-                d={isPeeking ? "M 255 230 Q 244 205 226 192" : "M 255 230 Q 242 200 208 182"}
+                d={isPeeking ? "M 255 230 Q 244 212 227 198" : "M 255 230 Q 242 200 208 182"}
                 stroke="#7c3aed"
                 strokeWidth="18"
                 strokeLinecap="round"
                 fill="none"
               />
               <circle
-                cx={isPeeking ? 226 : 208}
-                cy={isPeeking ? 192 : 182}
+                cx={isPeeking ? 227 : 208}
+                cy={isPeeking ? 198 : 182}
                 r="12"
                 fill="#8b5cf6"
                 stroke="#6d28d9"
@@ -337,26 +392,42 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
               </>
             ) : (
               <>
-                <ellipse cx="264" cy="225" rx="8" ry={isBlinking ? "1" : "8"} fill="#ffffff" />
+                <ellipse cx="264" cy="225" rx="8.5" ry={isBlinking ? "1" : "8.5"} fill="#ffffff" />
                 {!isBlinking && (
-                  <circle
-                    cx={264 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
-                    cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
-                    r="4"
-                    fill="#4c0519"
-                    style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
-                  />
+                  <>
+                    <circle
+                      cx={264 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
+                      cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
+                      r="4.2"
+                      fill="#4c0519"
+                      style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                    />
+                    <circle
+                      cx={265.5 + (isCoveringEyes ? -3 : pupilOffset.x * 0.8)}
+                      cy={223.5 + (isCoveringEyes ? 4 : pupilOffset.y * 0.8)}
+                      r="1.5"
+                      fill="#ffffff"
+                    />
+                  </>
                 )}
 
-                <ellipse cx="288" cy="225" rx="8" ry={isBlinking ? "1" : "8"} fill="#ffffff" />
+                <ellipse cx="288" cy="225" rx="8.5" ry={isBlinking ? "1" : "8.5"} fill="#ffffff" />
                 {!isBlinking && (
-                  <circle
-                    cx={288 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
-                    cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
-                    r="4"
-                    fill="#4c0519"
-                    style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
-                  />
+                  <>
+                    <circle
+                      cx={288 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
+                      cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
+                      r="4.2"
+                      fill="#4c0519"
+                      style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                    />
+                    <circle
+                      cx={289.5 + (isCoveringEyes ? -3 : pupilOffset.x * 0.8)}
+                      cy={223.5 + (isCoveringEyes ? 4 : pupilOffset.y * 0.8)}
+                      r="1.5"
+                      fill="#ffffff"
+                    />
+                  </>
                 )}
               </>
             )}

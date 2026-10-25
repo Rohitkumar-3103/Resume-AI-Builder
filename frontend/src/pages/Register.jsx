@@ -142,6 +142,7 @@ const Register = ({ onLogin }) => {
           <h1 className="char-auth-title">
             Create <span className="char-title-accent">Account.</span>
           </h1>
+          <p className="char-auth-subtitle">Pull the cord to illuminate your path</p>
 
           {error && (
             <div className="char-auth-error-alert">
@@ -272,23 +273,35 @@ const Register = ({ onLogin }) => {
               )}
             </div>
 
-            {/* Primary Sign Up Button with Arrow */}
-            <button
-              type="submit"
-              className={`char-submit-pill-btn ${loading ? "is-loading" : ""}`}
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="char-btn-loading-state">
-                  <span className="char-btn-spinner" />
-                  CREATING ACCOUNT...
-                </span>
-              ) : (
-                <span>
-                  CREATE ACCOUNT <span>→</span>
-                </span>
-              )}
-            </button>
+            {/* Primary Sign Up Button with Glowing Aura and Sparkles (Image 4 & 5) */}
+            <div className="char-btn-glow-container">
+              <button
+                type="submit"
+                className={`char-submit-pill-btn ${loading ? "is-loading" : ""}`}
+                disabled={loading}
+              >
+                {loading ? (
+                  <span className="char-btn-loading-state">
+                    <span className="char-btn-spinner" />
+                    CREATING ACCOUNT...
+                  </span>
+                ) : (
+                  <span>
+                    CREATE ACCOUNT <span>→</span>
+                  </span>
+                )}
+              </button>
+              <div className="char-btn-sparkles" aria-hidden="true">
+                <span className="btn-sparkle p1" />
+                <span className="btn-sparkle p2" />
+                <span className="btn-sparkle p3" />
+                <span className="btn-sparkle p4" />
+                <span className="btn-sparkle p5" />
+                <span className="btn-sparkle p6" />
+                <span className="btn-sparkle p7" />
+                <span className="btn-sparkle p8" />
+              </div>
+            </div>
 
             {/* Divider */}
             <div className="char-divider">OR</div>
