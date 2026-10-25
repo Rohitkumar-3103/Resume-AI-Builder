@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register, login } from "../services/api";
 import AnimatedCharacters from "../components/AnimatedCharacters";
+import resumecraftLogo from "../assets/resumecraft_raw_icon.png";
 
 const Register = ({ onLogin }) => {
   const [name, setName] = useState("");
@@ -100,7 +101,7 @@ const Register = ({ onLogin }) => {
 
   return (
     <div className="char-auth-page-wrapper">
-      <div className="char-auth-card">
+      <div className={`char-auth-card ${loading ? "card-processing" : ""}`}>
         {/* ========================================================
             LEFT COLUMN: INTERACTIVE ANIMATED CHARACTERS
             ======================================================== */}
@@ -108,6 +109,7 @@ const Register = ({ onLogin }) => {
           <AnimatedCharacters
             activeField={focusedField}
             isPasswordShown={showPassword}
+            isLoading={loading}
           />
         </div>
 
@@ -115,18 +117,13 @@ const Register = ({ onLogin }) => {
             RIGHT COLUMN: CLEAN REGISTRATION FORM
             ======================================================== */}
         <div className="char-auth-form-side">
-          {/* Top Geometric Prism Delta Logo (Animated) */}
+          {/* Official ResumeCraft Logo (Animated Float) */}
           <Link to="/" className="char-auth-logo-link" title="ResumeCraft">
-            <svg
-              className="char-auth-geometric-logo"
-              viewBox="0 0 40 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M20 4L36 32H28L20 18L12 32H4L20 4Z" fill="currentColor" fillOpacity="0.9" />
-              <path d="M20 4L28 32H20L15 22L20 4Z" fill="#ffffff" fillOpacity="0.35" />
-              <path d="M20 18L28 32H12L20 18Z" fill="#000000" fillOpacity="0.22" />
-            </svg>
+            <img
+              src={resumecraftLogo}
+              alt="ResumeCraft Logo"
+              className="char-auth-brand-logo"
+            />
           </Link>
 
           <h1 className="char-auth-title">Create an account</h1>

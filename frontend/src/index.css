@@ -9939,6 +9939,21 @@ body.dark-theme .char-auth-logo-link {
   transform: rotate(14deg) scale(1.08);
 }
 
+.char-auth-brand-logo {
+  width: 44px;
+  height: auto;
+  max-height: 48px;
+  object-fit: contain;
+  display: block;
+  animation: logoFloat 4s ease-in-out infinite alternate;
+  filter: drop-shadow(0 4px 12px rgba(37, 99, 235, 0.22));
+  transition: transform 0.25s ease;
+}
+
+.char-auth-brand-logo:hover {
+  transform: scale(1.1) rotate(4deg);
+}
+
 .char-auth-geometric-logo {
   width: 40px;
   height: 40px;
@@ -9956,6 +9971,146 @@ body.dark-theme .char-auth-logo-link {
   }
   100% {
     transform: translateY(2px) rotate(3deg);
+  }
+}
+
+/* ----------------------------------------------------
+   SIGNIN & SIGNUP PROCESS ANIMATIONS (CELEBRATION)
+   ---------------------------------------------------- */
+.card-processing {
+  box-shadow: 0 25px 70px -10px rgba(37, 99, 235, 0.35), 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+  transition: box-shadow 0.4s ease;
+}
+
+body.dark-theme .card-processing {
+  box-shadow: 0 25px 75px -10px rgba(37, 99, 235, 0.5), 0 0 0 2px rgba(96, 165, 250, 0.6) !important;
+}
+
+.is-loading-celebration .char-purple {
+  animation: purpleJump 0.55s ease-in-out infinite alternate !important;
+}
+
+.is-loading-celebration .char-pink {
+  animation: pinkJump 0.5s ease-in-out infinite alternate 0.08s !important;
+}
+
+.is-loading-celebration .char-yellow {
+  animation: yellowJump 0.52s ease-in-out infinite alternate 0.16s !important;
+}
+
+.is-loading-celebration .char-orange {
+  animation: orangeJump 0.48s ease-in-out infinite alternate 0.24s !important;
+}
+
+@keyframes purpleJump {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-16px) scale(1.02);
+  }
+}
+
+@keyframes pinkJump {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-14px) scale(1.02);
+  }
+}
+
+@keyframes yellowJump {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-12px) rotate(-4deg) scale(1.03);
+  }
+}
+
+@keyframes orangeJump {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-10px) scale(1.03);
+  }
+}
+
+/* Sparkles animation */
+.sparkle-dot {
+  animation: sparkleFloat 1.2s ease-in-out infinite alternate;
+}
+
+.sparkle-dot.s1 {
+  animation-delay: 0s;
+}
+
+.sparkle-dot.s2 {
+  animation-delay: 0.3s;
+}
+
+.sparkle-dot.s3 {
+  animation-delay: 0.6s;
+}
+
+.sparkle-star {
+  animation: starTwinkle 1s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.sparkle-star.star1 {
+  animation-delay: 0.15s;
+}
+
+.sparkle-star.star2 {
+  animation-delay: 0.45s;
+}
+
+@keyframes sparkleFloat {
+  0% {
+    opacity: 0.3;
+    transform: translateY(6px) scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.2);
+  }
+}
+
+@keyframes starTwinkle {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.7) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.25) rotate(45deg);
+  }
+}
+
+/* Processing Button Spinner */
+.char-btn-loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.char-btn-spinner {
+  width: 17px;
+  height: 17px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: btnSpin 0.65s linear infinite;
+  display: inline-block;
+}
+
+@keyframes btnSpin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

@@ -2,16 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 
 /**
  * AnimatedCharacters Component
- * Features 4 expressive characters (Purple, Pink, Orange, Yellow) faithfully matching the YouTube reference video.
+ * Features 4 expressive characters (Purple, Pink, Orange, Yellow) matching the interactive reference.
  * Features:
  * - Real-time pupil tracking across all characters via Math.atan2
- * - Yellow character with dynamic body sway & beak seesaw rotation following cursor
- * - Purple character that lifts arms and covers eyes when typing password
+ * - Dynamic Yellow character with body sway & seesaw beak motion following cursor
+ * - Purple character that covers eyes with paws when password focused
  * - Peeking behavior when password visibility is toggled
- * - Natural periodic blinking
- * - Idle breathing and organic physics
+ * - Exciting sign-in / sign-up process animation with celebration arms, bouncing, and sparkles when isLoading is active
+ * - Periodic natural blinking and organic breathing
  */
-const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
+const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false }) => {
   const containerRef = useRef(null);
   const [pupilOffset, setPupilOffset] = useState({ x: 0, y: 0 });
   const [yellowBeakAngle, setYellowBeakAngle] = useState(0);
@@ -25,6 +25,14 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
       const rect = containerRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height * 0.5;
+
+      // When celebrating/loading, look straight forward/upward happily
+      if (isLoading) {
+        setPupilOffset({ x: 0, y: -3 });
+        setYellowBeakAngle(-12);
+        setYellowBodyTilt(0);
+        return;
+      }
 
       // 1. Password state: eyes shy away / yellow dips beak
       if (activeField === "password" && !isPasswordShown) {
@@ -55,17 +63,16 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
       });
 
       // Yellow character motion: tilts and beak rotates like seesaw
-      // Normalized X (-1 to 1) and Y (-1 to 1)
       const normX = Math.max(-1, Math.min(1, dx / (window.innerWidth / 2)));
       const normY = Math.max(-1, Math.min(1, dy / (window.innerHeight / 2)));
 
-      setYellowBodyTilt(normX * 6); // body sways up to 6 degrees
-      setYellowBeakAngle(normY * 18); // beak rotates up to 18 degrees with vertical mouse motion
+      setYellowBodyTilt(normX * 6);
+      setYellowBeakAngle(normY * 18);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [activeField, isPasswordShown]);
+  }, [activeField, isPasswordShown, isLoading]);
 
   // Periodic natural blinking
   useEffect(() => {
@@ -76,11 +83,11 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const isCoveringEyes = activeField === "password" && !isPasswordShown;
-  const isPeeking = activeField === "password" && isPasswordShown;
+  const isCoveringEyes = activeField === "password" && !isPasswordShown && !isLoading;
+  const isPeeking = activeField === "password" && isPasswordShown && !isLoading;
 
   return (
-    <div className="char-stage-wrapper" ref={containerRef}>
+    <div className={`char-stage-wrapper ${isLoading ? "is-loading-celebration" : ""}`} ref={containerRef}>
       <svg
         viewBox="0 0 460 400"
         className="char-stage-svg"
@@ -115,10 +122,21 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
           </filter>
         </defs>
 
+        {/* Celebration sparkles when signing in / signing up */}
+        {isLoading && (
+          <g className="char-sparkles">
+            <circle cx="110" cy="110" r="4" fill="#fde047" className="sparkle-dot s1" />
+            <circle cx="280" cy="95" r="5" fill="#ec4899" className="sparkle-dot s2" />
+            <circle cx="370" cy="140" r="4.5" fill="#60a5fa" className="sparkle-dot s3" />
+            <polygon points="190,90 193,98 201,100 193,102 190,110 187,102 179,100 187,98" fill="#fbbf24" className="sparkle-star star1" />
+            <polygon points="320,110 322,116 328,118 322,120 320,126 318,120 312,118 318,116" fill="#a78bfa" className="sparkle-star star2" />
+          </g>
+        )}
+
         {/* ========================================================
             1. PURPLE CHARACTER (Tall, Central Pillar)
             ======================================================== */}
-        <g className={`char-purple ${isCoveringEyes ? "hiding" : ""}`}>
+        <g className={`char-purple ${isCoveringEyes ? "hiding" : ""} ${isLoading ? "celebrating" : ""}`}>
           {/* Body */}
           <rect
             x="130"
@@ -130,8 +148,16 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
             filter="url(#softGlow)"
           />
 
-          {/* Eyes (if not covered or when peeking) */}
-          {!isCoveringEyes ? (
+          {/* Eyes & Expressions */}
+          {isLoading ? (
+            /* Joyful celebration face */
+            <g className="purple-happy-face">
+              <path d="M 162 178 Q 170 170 178 178" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" fill="none" />
+              <path d="M 197 178 Q 205 170 213 178" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" fill="none" />
+              <path d="M 180 194 Q 188 208 196 194 Z" fill="#ffffff" />
+            </g>
+          ) : !isCoveringEyes ? (
+            /* Normal tracking eyes */
             <g className="purple-eyes">
               {/* Left Eye */}
               <ellipse cx="170" cy="180" rx="9" ry={isBlinking ? "1" : "9"} fill="#ffffff" />
@@ -173,7 +199,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
                 <>
                   {/* Left eye peeking through parted paws */}
                   <ellipse cx="170" cy="180" rx="8" ry="7" fill="#ffffff" />
-                  <circle cx="172" cy="181" r="3.5" fill="#1e1b4b" />
+                  <circle cx={170 + pupilOffset.x * 0.5} cy={180 + pupilOffset.y * 0.5} r="3.5" fill="#1e1b4b" />
                   <path
                     d="M 197 181 Q 204 176 211 181"
                     stroke="#ffffff"
@@ -206,8 +232,19 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
             </g>
           )}
 
-          {/* Hands covering eyes when typing password */}
-          {(isCoveringEyes || isPeeking) && (
+          {/* Raised arms when celebrating / loading */}
+          {isLoading ? (
+            <g className="purple-cheering-arms">
+              {/* Left Arm Raised High */}
+              <path d="M 130 220 Q 110 160 135 125" stroke="#7c3aed" strokeWidth="18" strokeLinecap="round" fill="none" />
+              <circle cx="135" cy="125" r="12" fill="#8b5cf6" stroke="#6d28d9" strokeWidth="2" />
+
+              {/* Right Arm Raised High */}
+              <path d="M 255 220 Q 275 160 250 125" stroke="#7c3aed" strokeWidth="18" strokeLinecap="round" fill="none" />
+              <circle cx="250" cy="125" r="12" fill="#8b5cf6" stroke="#6d28d9" strokeWidth="2" />
+            </g>
+          ) : (isCoveringEyes || isPeeking) ? (
+            /* Hands covering eyes when typing password */
             <g className="purple-paws">
               {/* Left Arm & Paw */}
               <path
@@ -243,13 +280,13 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
                 strokeWidth="2"
               />
             </g>
-          )}
+          ) : null}
         </g>
 
         {/* ========================================================
             2. PINK CHARACTER (Slender, Curious Pillar)
             ======================================================== */}
-        <g className={`char-pink ${isCoveringEyes ? "shy" : ""}`}>
+        <g className={`char-pink ${isCoveringEyes ? "shy" : ""} ${isLoading ? "celebrating" : ""}`}>
           {/* Body */}
           <rect
             x="245"
@@ -263,26 +300,35 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
 
           {/* Two Eyes near top */}
           <g className="pink-eyes">
-            <ellipse cx="264" cy="225" rx="8" ry={isBlinking ? "1" : "8"} fill="#ffffff" />
-            {!isBlinking && (
-              <circle
-                cx={264 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
-                cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
-                r="4"
-                fill="#4c0519"
-                style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
-              />
-            )}
+            {isLoading ? (
+              <>
+                <path d="M 258 225 Q 264 218 270 225" stroke="#4c0519" strokeWidth="3" strokeLinecap="round" fill="none" />
+                <path d="M 282 225 Q 288 218 294 225" stroke="#4c0519" strokeWidth="3" strokeLinecap="round" fill="none" />
+              </>
+            ) : (
+              <>
+                <ellipse cx="264" cy="225" rx="8" ry={isBlinking ? "1" : "8"} fill="#ffffff" />
+                {!isBlinking && (
+                  <circle
+                    cx={264 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
+                    cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
+                    r="4"
+                    fill="#4c0519"
+                    style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                  />
+                )}
 
-            <ellipse cx="288" cy="225" rx="8" ry={isBlinking ? "1" : "8"} fill="#ffffff" />
-            {!isBlinking && (
-              <circle
-                cx={288 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
-                cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
-                r="4"
-                fill="#4c0519"
-                style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
-              />
+                <ellipse cx="288" cy="225" rx="8" ry={isBlinking ? "1" : "8"} fill="#ffffff" />
+                {!isBlinking && (
+                  <circle
+                    cx={288 + (isCoveringEyes ? -3 : pupilOffset.x * 0.9)}
+                    cy={225 + (isCoveringEyes ? 4 : pupilOffset.y * 0.9)}
+                    r="4"
+                    fill="#4c0519"
+                    style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                  />
+                )}
+              </>
             )}
           </g>
         </g>
@@ -291,7 +337,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
             3. YELLOW CHARACTER (Right Rounded Dome with dynamic motion & seesaw beak)
             ======================================================== */}
         <g
-          className="char-yellow"
+          className={`char-yellow ${isLoading ? "celebrating" : ""}`}
           style={{
             transformOrigin: "340px 400px",
             transform: `rotate(${yellowBodyTilt}deg)`,
@@ -345,7 +391,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
         {/* ========================================================
             4. ORANGE CHARACTER (Wide, Happy Round Blob at Front)
             ======================================================== */}
-        <g className="char-orange">
+        <g className={`char-orange ${isLoading ? "celebrating" : ""}`}>
           {/* Body */}
           <path
             d="M 60 400 C 60 270, 180 270, 240 330 C 260 350, 260 400, 260 400 Z"
@@ -355,7 +401,12 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
 
           {/* Happy Eyes */}
           <g className="orange-face">
-            {!isCoveringEyes ? (
+            {isLoading ? (
+              <>
+                <path d="M 152 334 Q 160 326 168 334" stroke="#431407" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+                <path d="M 170 342 Q 184 362 198 342 Z" fill="#431407" />
+              </>
+            ) : !isCoveringEyes ? (
               <>
                 <circle cx="160" cy="335" r="4.5" fill="#431407" />
                 <circle
@@ -365,25 +416,32 @@ const AnimatedCharacters = ({ activeField, isPasswordShown }) => {
                   fill="#ffffff"
                   style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
                 />
+                <path
+                  d="M 172 344 Q 184 358 196 344"
+                  stroke="#431407"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  fill="none"
+                />
               </>
             ) : (
-              <path
-                d="M 154 336 Q 160 330 166 336"
-                stroke="#431407"
-                strokeWidth="3"
-                strokeLinecap="round"
-                fill="none"
-              />
+              <>
+                <path
+                  d="M 154 336 Q 160 330 166 336"
+                  stroke="#431407"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                <path
+                  d="M 172 344 Q 184 358 196 344"
+                  stroke="#431407"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+              </>
             )}
-
-            {/* Big Smile */}
-            <path
-              d="M 172 344 Q 184 358 196 344"
-              stroke="#431407"
-              strokeWidth="4"
-              strokeLinecap="round"
-              fill="none"
-            />
           </g>
         </g>
       </svg>

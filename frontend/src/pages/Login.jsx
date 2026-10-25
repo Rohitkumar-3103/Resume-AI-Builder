@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login, register } from "../services/api";
 import AnimatedCharacters from "../components/AnimatedCharacters";
+import resumecraftLogo from "../assets/resumecraft_raw_icon.png";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -65,7 +66,7 @@ const Login = ({ onLogin }) => {
 
   return (
     <div className="char-auth-page-wrapper">
-      <div className="char-auth-card">
+      <div className={`char-auth-card ${loading ? "card-processing" : ""}`}>
         {/* ========================================================
             LEFT COLUMN: INTERACTIVE ANIMATED CHARACTERS
             ======================================================== */}
@@ -73,26 +74,21 @@ const Login = ({ onLogin }) => {
           <AnimatedCharacters
             activeField={focusedField}
             isPasswordShown={showPassword}
+            isLoading={loading}
           />
         </div>
 
         {/* ========================================================
-            RIGHT COLUMN: CLEAN LOGIN FORM (Matching Video Design)
+            RIGHT COLUMN: CLEAN LOGIN FORM
             ======================================================== */}
         <div className="char-auth-form-side">
-          {/* Top Geometric Prism Delta Logo (Animated) */}
+          {/* Official ResumeCraft Logo (Animated Float) */}
           <Link to="/" className="char-auth-logo-link" title="ResumeCraft">
-            <svg
-              className="char-auth-geometric-logo"
-              viewBox="0 0 40 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Modern Folded Delta Prism matching YouTube reference */}
-              <path d="M20 4L36 32H28L20 18L12 32H4L20 4Z" fill="currentColor" fillOpacity="0.9" />
-              <path d="M20 4L28 32H20L15 22L20 4Z" fill="#ffffff" fillOpacity="0.35" />
-              <path d="M20 18L28 32H12L20 18Z" fill="#000000" fillOpacity="0.22" />
-            </svg>
+            <img
+              src={resumecraftLogo}
+              alt="ResumeCraft Logo"
+              className="char-auth-brand-logo"
+            />
           </Link>
 
           <h1 className="char-auth-title">Welcome back!</h1>
