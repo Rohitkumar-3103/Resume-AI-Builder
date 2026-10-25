@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register, login } from "../services/api";
 import AnimatedCharacters from "../components/AnimatedCharacters";
@@ -10,10 +10,20 @@ const Register = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
+  const [activeField, setActiveField] = useState("name");
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimeoutRef = useRef(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleFieldChange = (setter, val) => {
+    setter(val);
+    setIsTyping(true);
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => setIsTyping(false), 550);
+  };
 
   // Password strength calculation
   const getPasswordStrength = () => {
@@ -99,6 +109,8 @@ const Register = ({ onLogin }) => {
     }
   };
 
+  const currentField = focusedField || activeField;
+
   return (
     <div className="char-auth-page-wrapper">
       <div className={`char-auth-card ${loading ? "card-processing" : ""}`}>
@@ -107,9 +119,10 @@ const Register = ({ onLogin }) => {
             ======================================================== */}
         <div className="char-auth-stage-side">
           <AnimatedCharacters
-            activeField={focusedField}
+            activeField={currentField}
             isPasswordShown={showPassword}
             isLoading={loading}
+            isTyping={isTyping}
           />
         </div>
 
@@ -129,9 +142,6 @@ const Register = ({ onLogin }) => {
           <h1 className="char-auth-title">
             Create <span className="char-title-accent">Account.</span>
           </h1>
-          <p className="char-auth-subtitle">
-            Illuminating the future of your professional career
-          </p>
 
           {error && (
             <div className="char-auth-error-alert">
@@ -146,20 +156,19 @@ const Register = ({ onLogin }) => {
           )}
 
           <form onSubmit={handleSubmit} className="char-auth-form">
-            {/* Interactive Left Indicator Arrow */}
-            {focusedField && (
-              <div
-                className={`char-arrow-indicator ${
-                  focusedField === "name"
-                    ? "at-reg-name"
-                    : focusedField === "email"
-                    ? "at-reg-email"
-                    : "at-reg-password"
-                }`}
-              >
-                ◀
-              </div>
-            )}
+            {/* Interactive Left Indicator Arrow that smoothly glides between inputs */}
+            <div
+              className={`char-arrow-indicator ${
+                currentField === "name"
+                  ? "at-reg-name"
+                  : currentField === "email"
+                  ? "at-reg-email"
+                  : "at-reg-password"
+              }`}
+              aria-hidden="true"
+            >
+              ◀
+            </div>
 
             {/* Full Name Field */}
             <div className="char-form-group">
@@ -173,8 +182,11 @@ const Register = ({ onLogin }) => {
                   type="text"
                   id="reg-name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  onFocus={() => setFocusedField("name")}
+                  onChange={(e) => handleFieldChange(setName, e.target.value)}
+                  onFocus={() => {
+                    setFocusedField("name");
+                    setActiveField("name");
+                  }}
                   onBlur={() => setFocusedField(null)}
                   placeholder="e.g. Alex Rivera"
                   required
@@ -194,8 +206,11 @@ const Register = ({ onLogin }) => {
                   type="email"
                   id="reg-email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => setFocusedField("email")}
+                  onChange={(e) => handleFieldChange(setEmail, e.target.value)}
+                  onFocus={() => {
+                    setFocusedField("email");
+                    setActiveField("email");
+                  }}
                   onBlur={() => setFocusedField(null)}
                   placeholder="Enter your email"
                   required
@@ -215,8 +230,11 @@ const Register = ({ onLogin }) => {
                   type={showPassword ? "text" : "password"}
                   id="reg-password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setFocusedField("password")}
+                  onChange={(e) => handleFieldChange(setPassword, e.target.value)}
+                  onFocus={() => {
+                    setFocusedField("password");
+                    setActiveField("password");
+                  }}
                   onBlur={() => setFocusedField(null)}
                   placeholder="Min 6 characters"
                   required

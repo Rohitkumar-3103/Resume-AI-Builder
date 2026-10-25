@@ -11,7 +11,7 @@ import React, { useState, useEffect, useRef } from "react";
  * - Exciting sign-in / sign-up process animation with celebration arms, bouncing, and sparkles when isLoading is active
  * - Periodic natural blinking and organic breathing
  */
-const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false }) => {
+const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, isTyping = false }) => {
   const containerRef = useRef(null);
   const [pupilOffset, setPupilOffset] = useState({ x: 0, y: 0 });
   const [yellowBeakAngle, setYellowBeakAngle] = useState(0);
@@ -89,7 +89,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false })
 
   return (
     <div className={`char-stage-wrapper ${isLoading ? "is-loading-celebration" : ""} ${isLampOn ? "lamp-illuminated" : "lamp-dimmed"}`} ref={containerRef}>
-      {/* Hanging Lamp from Image 1 illuminating the characters */}
+      {/* Hanging Lamp from Image 1 & 3 illuminating the characters */}
       <div
         className={`stage-lamp ${isLampOn ? "lamp-on" : "lamp-off"}`}
         onClick={() => setIsLampOn(!isLampOn)}
@@ -100,6 +100,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false })
         <div className="lamp-shade" />
         <div className="lamp-light" />
         <div className="lamp-beam" />
+        <div className="lamp-ambient-glow" />
         <div className="lamp-pull-cord">
           <div className="cord-wire" />
           <div className="cord-ball" />
@@ -204,14 +205,22 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false })
                 />
               )}
 
-              {/* Cute Smile */}
-              <path
-                d="M 182 198 Q 188 206 194 198"
-                stroke="#1e1b4b"
-                strokeWidth="3"
-                strokeLinecap="round"
-                fill="none"
-              />
+              {/* Cute Smile / Mouth */}
+              {isTyping ? (
+                <path
+                  className="purple-talking-mouth"
+                  d="M 180 196 Q 188 208 196 196 Z"
+                  fill="#1e1b4b"
+                />
+              ) : (
+                <path
+                  d="M 182 198 Q 188 206 194 198"
+                  stroke="#1e1b4b"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+              )}
             </g>
           ) : (
             /* Eyes closed shyly / hands covering / peeking */
@@ -351,6 +360,17 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false })
                 )}
               </>
             )}
+
+            {/* Pink Mouth */}
+            {isLoading ? (
+              <path d="M 271 237 Q 276 245 281 237 Z" fill="#ffffff" />
+            ) : isCoveringEyes ? (
+              <path d="M 273 239 Q 276 236 279 239" stroke="#4c0519" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+            ) : isTyping ? (
+              <path className="pink-talking-mouth" d="M 272 237 Q 276 244 280 237 Z" fill="#4c0519" />
+            ) : (
+              <path d="M 273 238 Q 276 243 279 238" stroke="#4c0519" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+            )}
           </g>
         </g>
 
@@ -382,19 +402,28 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false })
             <ellipse
               cx={328 + pupilOffset.x * 0.6}
               cy={270 + pupilOffset.y * 0.6}
-              rx="4"
-              ry={isBlinking ? "0.5" : "4"}
+              rx="4.5"
+              ry={isBlinking ? "0.5" : "4.5"}
               fill="#422006"
               style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
             />
+            {!isBlinking && (
+              <circle
+                cx={329 + pupilOffset.x * 0.6}
+                cy={269 + pupilOffset.y * 0.6}
+                r="1.3"
+                fill="#ffffff"
+              />
+            )}
 
-            {/* Dynamic Seesaw Beak / Expression line that rotates with motion */}
+            {/* Dynamic Seesaw Beak / Expression line that rotates with motion and chirps when typing */}
             <g
               style={{
                 transformOrigin: "345px 275px",
-                transform: `rotate(${yellowBeakAngle}deg)`,
+                transform: `rotate(${yellowBeakAngle + (isTyping ? 5 : 0)}deg)`,
                 transition: "transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1)"
               }}
+              className={isTyping ? "yellow-beak-chattering" : ""}
             >
               <line
                 x1="345"
@@ -420,7 +449,7 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false })
             filter="url(#softGlow)"
           />
 
-          {/* Happy Eyes */}
+          {/* Happy Eyes & Expressive Mouth */}
           <g className="orange-face">
             {isLoading ? (
               <>
@@ -429,28 +458,45 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false })
               </>
             ) : !isCoveringEyes ? (
               <>
-                <circle cx="160" cy="335" r="4.5" fill="#431407" />
-                <circle
-                  cx={160 + pupilOffset.x * 0.5}
-                  cy={335 + pupilOffset.y * 0.5}
-                  r="2"
-                  fill="#ffffff"
-                  style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
-                />
-                <path
-                  d="M 172 344 Q 184 358 196 344"
-                  stroke="#431407"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  fill="none"
-                />
+                <ellipse cx="160" cy="335" rx="7.5" ry={isBlinking ? "1" : "7.5"} fill="#ffffff" />
+                {!isBlinking && (
+                  <>
+                    <circle
+                      cx={160 + pupilOffset.x * 0.55}
+                      cy={335 + pupilOffset.y * 0.55}
+                      r="4.2"
+                      fill="#431407"
+                      style={{ transition: "cx 0.08s ease-out, cy 0.08s ease-out" }}
+                    />
+                    <circle
+                      cx={161 + pupilOffset.x * 0.55}
+                      cy={333 + pupilOffset.y * 0.55}
+                      r="1.6"
+                      fill="#ffffff"
+                    />
+                  </>
+                )}
+                {isTyping ? (
+                  <>
+                    <path className="orange-talking-mouth" d="M 172 343 Q 184 362 196 343 Z" fill="#431407" />
+                    <path d="M 178 354 Q 184 362 190 354" fill="#fb7185" />
+                  </>
+                ) : (
+                  <path
+                    d="M 172 344 Q 184 358 196 344"
+                    stroke="#431407"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                )}
               </>
             ) : (
               <>
                 <path
                   d="M 154 336 Q 160 330 166 336"
                   stroke="#431407"
-                  strokeWidth="3"
+                  strokeWidth="3.5"
                   strokeLinecap="round"
                   fill="none"
                 />

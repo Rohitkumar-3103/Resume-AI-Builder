@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login, register } from "../services/api";
 import AnimatedCharacters from "../components/AnimatedCharacters";
@@ -10,9 +10,19 @@ const Login = ({ onLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
+  const [activeField, setActiveField] = useState("email");
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimeoutRef = useRef(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleFieldChange = (setter, val) => {
+    setter(val);
+    setIsTyping(true);
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => setIsTyping(false), 550);
+  };
 
   // Instant demo or Google login simulation
   const handleDemoOrGoogleLogin = async (userName = "Alex Rivera", userEmail = "alex@example.com") => {
@@ -64,6 +74,8 @@ const Login = ({ onLogin }) => {
     }
   };
 
+  const currentField = focusedField || activeField;
+
   return (
     <div className="char-auth-page-wrapper">
       <div className={`char-auth-card ${loading ? "card-processing" : ""}`}>
@@ -72,9 +84,10 @@ const Login = ({ onLogin }) => {
             ======================================================== */}
         <div className="char-auth-stage-side">
           <AnimatedCharacters
-            activeField={focusedField}
+            activeField={currentField}
             isPasswordShown={showPassword}
             isLoading={loading}
+            isTyping={isTyping}
           />
         </div>
 
@@ -102,16 +115,15 @@ const Login = ({ onLogin }) => {
           )}
 
           <form onSubmit={handleSubmit} className="char-auth-form">
-            {/* Interactive Left Indicator Arrow */}
-            {focusedField && (
-              <div
-                className={`char-arrow-indicator ${
-                  focusedField === "email" ? "at-login-email" : "at-login-password"
-                }`}
-              >
-                ◀
-              </div>
-            )}
+            {/* Interactive Left Indicator Arrow that smoothly glides between inputs */}
+            <div
+              className={`char-arrow-indicator ${
+                currentField === "email" ? "at-login-email" : "at-login-password"
+              }`}
+              aria-hidden="true"
+            >
+              ◀
+            </div>
 
             {/* Email Field with User Icon */}
             <div className="char-form-group">
@@ -125,8 +137,11 @@ const Login = ({ onLogin }) => {
                   type="email"
                   id="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => setFocusedField("email")}
+                  onChange={(e) => handleFieldChange(setEmail, e.target.value)}
+                  onFocus={() => {
+                    setFocusedField("email");
+                    setActiveField("email");
+                  }}
                   onBlur={() => setFocusedField(null)}
                   placeholder="Enter your email"
                   required
@@ -146,8 +161,11 @@ const Login = ({ onLogin }) => {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setFocusedField("password")}
+                  onChange={(e) => handleFieldChange(setPassword, e.target.value)}
+                  onFocus={() => {
+                    setFocusedField("password");
+                    setActiveField("password");
+                  }}
                   onBlur={() => setFocusedField(null)}
                   placeholder="••••••••"
                   required
