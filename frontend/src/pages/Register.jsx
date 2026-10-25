@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register, login } from "../services/api";
+import AnimatedCharacters from "../components/AnimatedCharacters";
 
 const Register = ({ onLogin }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [focusedField, setFocusedField] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,6 +30,33 @@ const Register = ({ onLogin }) => {
 
   const strength = getPasswordStrength();
 
+  // Quick Google Signup Simulation
+  const handleGoogleRegister = async () => {
+    const defaultName = "Alex Rivera";
+    const defaultEmail = "alex@example.com";
+    setName(defaultName);
+    setEmail(defaultEmail);
+    setPassword("password123");
+    setError("");
+    setLoading(true);
+
+    try {
+      try {
+        await register(defaultName, defaultEmail, "password123");
+      } catch (regErr) {
+        // already registered, proceed to login
+      }
+      const authData = await login(defaultEmail, "password123");
+      if (onLogin) onLogin(authData.token);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Google signup failed. Try standard registration.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -43,7 +72,6 @@ const Register = ({ onLogin }) => {
     try {
       await register(name, email, password);
 
-      // If onLogin callback is available, automatically authenticate
       if (onLogin) {
         setSuccess("Account created successfully! Launching your workspace...");
         try {
@@ -61,7 +89,7 @@ const Register = ({ onLogin }) => {
       setSuccess("Account created successfully! Redirecting to login...");
       setTimeout(() => {
         navigate("/login");
-      }, 1500);
+      }, 1400);
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || "Registration failed. Please check your details and try again.");
@@ -71,140 +99,182 @@ const Register = ({ onLogin }) => {
   };
 
   return (
-    <div className="auth-page-wrapper">
-      {/* Dynamic ambient background glow orbs */}
-      <div className="auth-ambient-orb orb-primary" />
-      <div className="auth-ambient-orb orb-secondary" />
-      <div className="auth-ambient-orb orb-tertiary" />
-      <div className="auth-grid-overlay" />
+    <div className="char-auth-page-wrapper">
+      <div className="char-auth-card">
+        {/* ========================================================
+            LEFT COLUMN: INTERACTIVE ANIMATED CHARACTERS
+            ======================================================== */}
+        <div className="char-auth-stage-side">
+          <AnimatedCharacters
+            activeField={focusedField}
+            isPasswordShown={showPassword}
+          />
+        </div>
 
-      <div className="auth-card-container">
-        <div className="auth-card">
-          <div className="auth-card-header">
-            {/* Segmented Mode Switcher */}
-            <div className="auth-nav-tabs">
-              <Link to="/login" className="auth-nav-tab">
-                <span>🔐</span> Sign In
-              </Link>
-              <Link to="/register" className="auth-nav-tab active">
-                <span>✨</span> Create Account
-              </Link>
-            </div>
+        {/* ========================================================
+            RIGHT COLUMN: CLEAN REGISTRATION FORM
+            ======================================================== */}
+        <div className="char-auth-form-side">
+          {/* Top Geometric Prism Logo */}
+          <Link to="/" className="char-auth-logo-link" title="ResumeCraft">
+            <svg
+              className="char-auth-geometric-logo"
+              viewBox="0 0 36 36"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M18 3L32 10.5V25.5L18 33L4 25.5V10.5L18 3Z" fill="currentColor" fillOpacity="0.9" />
+              <path d="M18 3L32 10.5L18 18L4 10.5L18 3Z" fill="#ffffff" fillOpacity="0.25" />
+              <path d="M18 18V33L4 25.5V10.5L18 18Z" fill="#000000" fillOpacity="0.18" />
+            </svg>
+          </Link>
 
-            <h2 className="auth-card-title">Create Your Account</h2>
-            <p className="auth-card-subtitle">
-              Start crafting job-winning, ATS-optimized resumes & cover letters in minutes.
-            </p>
-          </div>
+          <h1 className="char-auth-title">Create an account</h1>
+          <p className="char-auth-subtitle">Start building your dream resume today</p>
 
           {error && (
-            <div className="auth-error-alert">
-              <span className="alert-icon">⚠️</span>
-              <span>{error}</span>
+            <div className="char-auth-error-alert">
+              <span>⚠️ {error}</span>
             </div>
           )}
 
           {success && (
-            <div className="auth-success-alert">
-              <span className="alert-icon">✓</span>
-              <span>{success}</span>
+            <div className="char-auth-success-alert">
+              <span>✓ {success}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="auth-form">
-            <div className="auth-form-field">
-              <label htmlFor="name">Full Name</label>
-              <div className="input-with-icon">
-                <span className="field-icon">👤</span>
+          <form onSubmit={handleSubmit} className="char-auth-form">
+            {/* Interactive Left Indicator Arrow */}
+            {focusedField && (
+              <div
+                className={`char-arrow-indicator ${
+                  focusedField === "name"
+                    ? "at-reg-name"
+                    : focusedField === "email"
+                    ? "at-reg-email"
+                    : "at-reg-password"
+                }`}
+              >
+                ◀
+              </div>
+            )}
+
+            {/* Name Field */}
+            <div className="char-form-group">
+              <label htmlFor="reg-name">Full Name</label>
+              <div className="char-input-wrap">
                 <input
                   type="text"
-                  id="name"
-                  placeholder="e.g. Alex Rivera"
+                  id="reg-name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  onFocus={() => setFocusedField("name")}
+                  onBlur={() => setFocusedField(null)}
+                  placeholder="e.g. Alex Rivera"
                   required
                 />
               </div>
             </div>
 
-            <div className="auth-form-field">
-              <label htmlFor="email">Email Address</label>
-              <div className="input-with-icon">
-                <span className="field-icon">✉️</span>
+            {/* Email Field */}
+            <div className="char-form-group">
+              <label htmlFor="reg-email">Email</label>
+              <div className="char-input-wrap">
                 <input
                   type="email"
-                  id="email"
-                  placeholder="e.g. alex.rivera@example.com"
+                  id="reg-email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => setFocusedField("email")}
+                  onBlur={() => setFocusedField(null)}
+                  placeholder="Enter your email"
                   required
                 />
               </div>
             </div>
 
-            <div className="auth-form-field">
-              <div className="field-label-row">
-                <label htmlFor="password">Create Password</label>
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="password-toggle-link"
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-              <div className="input-with-icon">
-                <span className="field-icon">🔒</span>
+            {/* Password Field */}
+            <div className="char-form-group">
+              <label htmlFor="reg-password">Password</label>
+              <div className="char-input-wrap">
                 <input
                   type={showPassword ? "text" : "password"}
-                  id="password"
-                  placeholder="Min 6 characters"
+                  id="reg-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setFocusedField("password")}
+                  onBlur={() => setFocusedField(null)}
+                  placeholder="Min 6 characters"
                   required
                 />
+                <button
+                  type="button"
+                  className="char-password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  title={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                      <line x1="1" y1="1" x2="23" y2="23" />
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  )}
+                </button>
               </div>
 
-              {/* Password Strength Meter */}
+              {/* Strength bar */}
               {strength && (
-                <div className="password-strength-deck">
-                  <div className="strength-bar-track">
-                    <div
-                      className="strength-bar-fill"
-                      style={{ width: strength.width, backgroundColor: strength.color }}
-                    />
+                <div style={{ marginTop: "4px" }}>
+                  <div style={{ height: "4px", width: "100%", background: "rgba(0,0,0,0.06)", borderRadius: "2px", overflow: "hidden" }}>
+                    <div style={{ width: strength.width, height: "100%", background: strength.color, transition: "all 0.3s ease" }} />
                   </div>
-                  <span className="strength-label" style={{ color: strength.color }}>
+                  <span style={{ fontSize: "11.5px", color: strength.color, fontWeight: 500, marginTop: "2px", display: "inline-block" }}>
                     {strength.label}
                   </span>
                 </div>
               )}
             </div>
 
-            <button type="submit" className="auth-action-btn" disabled={loading}>
-              {loading ? (
-                <span className="btn-loading-content">
-                  <span className="btn-spinner" /> Creating Account...
-                </span>
-              ) : (
-                <span>Create Account & Get Started →</span>
-              )}
+            {/* Primary Sign Up Pill Button */}
+            <button
+              type="submit"
+              className="char-submit-pill-btn"
+              disabled={loading}
+            >
+              {loading ? "Creating account..." : "Sign up"}
+            </button>
+
+            {/* Secondary Google Sign up Button */}
+            <button
+              type="button"
+              className="char-google-pill-btn"
+              onClick={handleGoogleRegister}
+              disabled={loading}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.04h3.87c2.26-2.09 3.67-5.17 3.67-9.14z"/>
+                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.87-3.04c-1.08.72-2.45 1.16-4.06 1.16-3.13 0-5.78-2.11-6.73-4.96H1.27v3.13C3.25 21.31 7.34 24 12 24z"/>
+                <path fill="#FBBC05" d="M5.27 14.25c-.25-.72-.38-1.49-.38-2.25s.13-1.53.38-2.25V6.62H1.27C.46 8.24 0 10.06 0 12s.46 3.76 1.27 5.38l4-3.13z"/>
+                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.25 2.69 1.27 6.62l4 3.13c.95-2.85 3.6-4.96 6.73-4.96z"/>
+              </svg>
+              <span>Sign up with Google</span>
             </button>
           </form>
 
-          <div className="auth-card-footer">
+          {/* Footer prompt */}
+          <div className="char-auth-footer-prompt">
             <p>
               Already have an account?{" "}
-              <Link to="/login" className="auth-link">
-                Sign in here
+              <Link to="/login" className="char-switch-link">
+                Log In
               </Link>
             </p>
-
-            <div className="auth-trust-row">
-              <span className="auth-trust-item">🔒 256-Bit SSL Secure</span>
-              <span className="auth-trust-item">⚡ ATS-Compliant</span>
-              <span className="auth-trust-item">🤖 Gemini AI</span>
-            </div>
           </div>
         </div>
       </div>
