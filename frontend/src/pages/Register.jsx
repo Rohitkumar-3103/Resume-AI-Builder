@@ -87,10 +87,10 @@ const Register = ({ onLogin }) => {
         setSuccess("Account created successfully! Launching your workspace...");
         try {
           const authData = await login(email, password);
+          // Wait 5 seconds for celebration animation matching user requirement
+          await new Promise((resolve) => setTimeout(resolve, 5000));
           onLogin(authData.token);
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 800);
+          navigate("/dashboard");
           return;
         } catch (loginErr) {
           console.error("Auto login error:", loginErr);
@@ -98,9 +98,8 @@ const Register = ({ onLogin }) => {
       }
 
       setSuccess("Account created successfully! Redirecting to login...");
-      setTimeout(() => {
-        navigate("/login");
-      }, 1400);
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      navigate("/login");
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || "Registration failed. Please check your details and try again.");
@@ -142,7 +141,6 @@ const Register = ({ onLogin }) => {
           <h1 className="char-auth-title">
             Create <span className="char-title-accent">Account.</span>
           </h1>
-          <p className="char-auth-subtitle">Pull the cord to illuminate your path</p>
 
           {error && (
             <div className="char-auth-error-alert">

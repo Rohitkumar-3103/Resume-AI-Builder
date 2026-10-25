@@ -9874,14 +9874,14 @@ body.light-theme .template-modal-body {
   user-select: none;
 }
 
-/* Hanging Ceiling Lamp from Image 3, 4 & 5 */
+/* Hanging 3D Conical Ceiling Lamp from Image 5 */
 .stage-lamp {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 120px;
-  height: 125px;
+  width: 130px;
+  height: 130px;
   z-index: 6;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -9895,65 +9895,87 @@ body.light-theme .template-modal-body {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 3px;
-  height: 28px;
+  width: 2.5px;
+  height: 26px;
   background: linear-gradient(180deg, #94a3b8, #64748b);
   transform: translateX(-50%);
 }
 
-.lamp-cap {
+/* Layered metallic cap/socket matching Image 5 */
+.lamp-cap-top {
   position: absolute;
-  top: 26px;
+  top: 24px;
   left: 50%;
   transform: translateX(-50%);
-  width: 16px;
-  height: 12px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #94a3b8, #475569);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  width: 14px;
+  height: 5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #334155 0%, #64748b 50%, #1e293b 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-.lamp-shade {
+.lamp-cap-bottom {
   position: absolute;
-  top: 36px;
+  top: 28px;
   left: 50%;
   transform: translateX(-50%);
-  width: 86px;
-  height: 42px;
-  background: linear-gradient(180deg, #64748b 0%, #334155 60%, #1e293b 100%);
-  clip-path: polygon(34% 0, 66% 0, 100% 100%, 0 100%);
-  border-bottom: 3px solid #00ffc3;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  width: 22px;
+  height: 7px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(90deg, #475569 0%, #94a3b8 50%, #334155 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* 3D Conical Shade with smooth metallic sheen (Image 5) */
+.lamp-shade-body {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92px;
+  height: 44px;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+  background: linear-gradient(100deg, #1e293b 0%, #334155 35%, #64748b 52%, #334155 70%, #0f172a 100%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   z-index: 5;
 }
 
-.lamp-bulb-socket {
+/* Elliptical Under-Rim Opening reflecting cyan neon (Image 5) */
+.lamp-rim-opening {
   position: absolute;
-  top: 72px;
+  top: 70px;
   left: 50%;
   transform: translateX(-50%);
-  width: 30px;
-  height: 6px;
-  border-radius: 3px;
-  background: #334155;
+  width: 92px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 195, 0.45) 0%, rgba(15, 27, 25, 0.95) 75%);
+  border: 1.5px solid rgba(0, 255, 195, 0.65);
+  box-shadow: 0 0 14px rgba(0, 255, 195, 0.5), inset 0 0 8px rgba(0, 255, 195, 0.4);
   z-index: 6;
+  transition: opacity 0.3s ease, border-color 0.3s ease;
 }
 
-/* Physical Bright Glowing Bulb (Image 4 & 5) */
+.stage-lamp.lamp-off .lamp-rim-opening {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: none;
+}
+
+/* Glowing Bulb Dome TUCKED INSIDE shade opening (Image 5) */
 .lamp-bulb {
   position: absolute;
-  top: 73px;
+  top: 66px;
   left: 50%;
   transform: translateX(-50%);
-  width: 32px;
-  height: 28px;
-  border-radius: 50% 50% 45% 45%;
-  background: radial-gradient(circle at 50% 35%, #ffffff 0%, #b8fef0 35%, #00ffc3 80%, #00d9a6 100%);
+  width: 40px;
+  height: 22px;
+  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+  background: radial-gradient(circle at 50% 40%, #ffffff 0%, #d4fff5 25%, #00ffc3 70%, #00b88c 100%);
   box-shadow:
-    0 0 15px #ffffff,
-    0 0 30px #00ffc3,
-    0 0 55px #00ffc3,
-    0 0 95px rgba(0, 255, 195, 0.95);
+    0 0 16px #ffffff,
+    0 0 32px #00ffc3,
+    0 0 65px rgba(0, 255, 195, 0.9);
   z-index: 7;
   transition: opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
@@ -9961,21 +9983,21 @@ body.light-theme .template-modal-body {
 .stage-lamp.lamp-off .lamp-bulb {
   background: #334155;
   box-shadow: none;
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
-/* Intense Radial Bulb Halo */
+/* Radial Bulb Halo Bloom */
 .lamp-bulb-glow {
   position: absolute;
-  top: 60px;
+  top: 58px;
   left: 50%;
   transform: translateX(-50%);
-  width: 105px;
-  height: 70px;
+  width: 110px;
+  height: 55px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(0, 255, 195, 0.72) 40%, transparent 75%);
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(0, 255, 195, 0.65) 45%, transparent 75%);
   pointer-events: none;
-  filter: blur(8px);
+  filter: blur(9px);
   z-index: 6;
   transition: opacity 0.3s ease;
 }
@@ -9984,27 +10006,27 @@ body.light-theme .template-modal-body {
   opacity: 0;
 }
 
-/* WIDE CONICAL LIGHT BEAM - HIGH CONTRAST & EXTENDED RANGE (Image 4 & 5) */
+/* WIDE CONICAL LIGHT BEAM - SPREADING DIRECTLY FROM SHADE RIM (Image 5) */
 .lamp-beam {
   position: absolute;
-  top: 82px;
+  top: 76px;
   left: 50%;
   transform: translateX(-50%);
-  width: 450px;
+  width: 460px;
   height: 390px;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.75) 0%,
-    rgba(0, 255, 195, 0.45) 12%,
-    rgba(0, 255, 195, 0.24) 42%,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(0, 255, 195, 0.46) 12%,
+    rgba(0, 255, 195, 0.22) 42%,
     rgba(0, 255, 195, 0.08) 78%,
-    rgba(0, 255, 195, 0.01) 100%
+    transparent 100%
   );
-  clip-path: polygon(44% 0%, 56% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(43% 0%, 57% 0%, 100% 100%, 0% 100%);
   pointer-events: none;
   z-index: 4;
   transition: opacity 0.35s ease;
-  filter: drop-shadow(0 0 16px rgba(0, 255, 195, 0.4));
+  filter: drop-shadow(0 0 18px rgba(0, 255, 195, 0.42));
 }
 
 .stage-lamp.lamp-off .lamp-beam {
@@ -10037,8 +10059,8 @@ body.light-theme .template-modal-body {
 /* Pull cord from Image 3, 4 & 5 */
 .lamp-pull-cord {
   position: absolute;
-  top: 46px;
-  left: 74%;
+  top: 48px;
+  left: 76%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10053,7 +10075,7 @@ body.light-theme .template-modal-body {
 
 .cord-wire {
   width: 1.5px;
-  height: 48px;
+  height: 52px;
   background: #94a3b8;
 }
 
@@ -10122,7 +10144,7 @@ body.light-theme .template-modal-body {
 /* Continuous lively organic motions for all 4 characters */
 .char-purple {
   transform-origin: bottom center;
-  animation: purpleAlive 4.2s ease-in-out infinite;
+  animation: purpleAlive 3.8s ease-in-out infinite;
 }
 
 @keyframes purpleAlive {
@@ -10130,78 +10152,78 @@ body.light-theme .template-modal-body {
     transform: translateY(0) scaleY(1);
   }
   35% {
-    transform: translateY(-5px) scaleY(1.025);
+    transform: translateY(-8px) scaleY(1.03);
   }
   70% {
-    transform: translateY(-1px) scaleY(0.995);
+    transform: translateY(-2px) scaleY(0.99);
   }
 }
 
 .char-pink {
   transform-origin: bottom center;
-  animation: pinkAlive 3.6s ease-in-out infinite 0.5s;
+  animation: pinkAlive 3.4s ease-in-out infinite 0.4s;
 }
 
 @keyframes pinkAlive {
   0%, 100% {
     transform: translateY(0) rotate(0deg);
   }
-  40% {
-    transform: translateY(-6px) rotate(2deg);
+  35% {
+    transform: translateY(-8px) rotate(3deg);
   }
-  75% {
-    transform: translateY(-2px) rotate(-1deg);
+  70% {
+    transform: translateY(-3px) rotate(-1.5deg);
   }
 }
 
 .char-yellow {
   transform-origin: 340px 400px;
-  animation: yellowAlive 3.8s ease-in-out infinite 0.7s;
+  animation: yellowAlive 3.6s ease-in-out infinite 0.7s;
 }
 
 @keyframes yellowAlive {
   0%, 100% {
     transform: rotate(0deg) translateY(0);
   }
-  45% {
-    transform: rotate(-2.5deg) translateY(-4px);
+  40% {
+    transform: rotate(-3.5deg) translateY(-6px);
   }
-  80% {
-    transform: rotate(1.5deg) translateY(-1px);
+  75% {
+    transform: rotate(2deg) translateY(-2px);
   }
 }
 
 .char-yellow .yellow-face g line {
-  animation: beakSeesawIdle 3s ease-in-out infinite alternate;
+  animation: beakSeesawIdle 2.6s ease-in-out infinite alternate;
   transform-origin: 345px 275px;
 }
 
 @keyframes beakSeesawIdle {
   0% {
-    transform: rotate(-3deg);
+    transform: rotate(-6deg);
   }
   50% {
-    transform: rotate(4deg);
+    transform: rotate(5deg);
   }
   100% {
-    transform: rotate(-5deg);
+    transform: rotate(-7deg);
   }
 }
 
 .char-orange {
   transform-origin: bottom center;
-  animation: orangeAlive 3.4s ease-in-out infinite 0.2s;
+  animation: orangeAlive 3.2s ease-in-out infinite 0.2s;
 }
 
 @keyframes orangeAlive {
   0%, 100% {
     transform: translateY(0) scale(1, 1);
   }
-  45% {
-    transform: translateY(-4px) scale(1.03, 0.97);
+  35% {
+    transform: translateY(-6px) scale(1.05, 0.95);
   }
-  80% {
-    transform: translateY(1px) scale(0.985, 1.015);
+  70% {
+    transform: translateY(1px) scale(0.97, 1.02);
   }
 }
 
@@ -10831,6 +10853,158 @@ body.dark-theme .card-processing {
 }
 
 /* ----------------------------------------------------
+   LIGHT THEME SUPPORT & AUTOFILL FIX ("dark and light background")
+   ---------------------------------------------------- */
+body.light-theme .char-auth-page-wrapper {
+  background:
+    radial-gradient(circle at 18% 22%, #cffafe 0%, transparent 48%),
+    radial-gradient(circle at 82% 78%, #dcfce7 0%, transparent 48%),
+    #f1f5f9;
+}
+
+body.light-theme .char-auth-page-wrapper::before {
+  background: radial-gradient(circle, rgba(13, 148, 136, 0.12) 0%, transparent 70%);
+}
+
+body.light-theme .char-auth-page-wrapper::after {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+}
+
+body.light-theme .char-auth-card {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(13, 148, 136, 0.22);
+  box-shadow: 0 25px 70px rgba(15, 23, 42, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+body.light-theme .char-auth-stage-side {
+  background: linear-gradient(
+    155deg,
+    rgba(167, 243, 208, 0.42) 0%,
+    rgba(240, 253, 250, 0.96) 100%
+  );
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .char-auth-title {
+  color: #0f172a;
+}
+
+body.light-theme .char-title-accent {
+  color: #0d9488;
+  text-shadow: none;
+}
+
+body.light-theme .char-form-group label {
+  color: #0d9488;
+}
+
+body.light-theme .char-input-wrap input {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+body.light-theme .char-input-wrap input:focus {
+  border-color: #0d9488 !important;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.18) !important;
+}
+
+body.light-theme .char-input-wrap input::placeholder {
+  color: #94a3b8;
+}
+
+body.light-theme .char-input-icon {
+  stroke: #64748b;
+}
+
+body.light-theme .char-input-wrap:focus-within .char-input-icon {
+  stroke: #0d9488;
+  filter: none;
+}
+
+body.light-theme .char-password-toggle-btn {
+  color: #64748b;
+}
+
+body.light-theme .char-password-toggle-btn:hover {
+  color: #0f172a;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .char-checkbox-label {
+  color: #475569;
+}
+
+body.light-theme .char-checkbox-label input[type="checkbox"] {
+  accent-color: #0d9488;
+}
+
+body.light-theme .char-forgot-link {
+  color: #0d9488;
+}
+
+body.light-theme .char-divider {
+  color: #94a3b8;
+}
+
+body.light-theme .char-divider::before,
+body.light-theme .char-divider::after {
+  background: #e2e8f0;
+}
+
+body.light-theme .char-social-btn {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #334155;
+}
+
+body.light-theme .char-social-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+body.light-theme .char-auth-footer-prompt p {
+  color: #64748b;
+}
+
+body.light-theme .char-switch-link {
+  color: #0d9488;
+}
+
+body.light-theme .char-arrow-indicator {
+  color: #0d9488;
+  text-shadow: 0 0 8px rgba(13, 148, 136, 0.45);
+}
+
+body.light-theme .char-submit-pill-btn {
+  background: linear-gradient(100deg, #0d9488 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.35);
+}
+
+body.light-theme .char-submit-pill-btn:hover:not(:disabled) {
+  box-shadow: 0 6px 22px rgba(13, 148, 136, 0.5);
+}
+
+/* Autofill background fix for Webkit browsers in dark and light modes */
+.char-input-wrap input:-webkit-autofill,
+.char-input-wrap input:-webkit-autofill:hover, 
+.char-input-wrap input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #081a18 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+}
+
+body.light-theme .char-input-wrap input:-webkit-autofill,
+body.light-theme .char-input-wrap input:-webkit-autofill:hover,
+body.light-theme .char-input-wrap input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #0f172a !important;
+  caret-color: #0f172a !important;
+}
+
+/* ----------------------------------------------------
    FOOTER PROMPT
    ---------------------------------------------------- */
 .char-auth-footer-prompt {
@@ -10854,14 +11028,6 @@ body.dark-theme .card-processing {
 }
 
 .char-switch-link:hover {
-  color: #60a5fa;
-}
-
-body.dark-theme .char-switch-link {
-  color: #f8fafc;
-}
-
-body.dark-theme .char-switch-link:hover {
   color: #60a5fa;
 }
 

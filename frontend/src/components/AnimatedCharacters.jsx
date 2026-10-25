@@ -89,16 +89,17 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
 
   return (
     <div className={`char-stage-wrapper ${isLoading ? "is-loading-celebration" : ""} ${isLampOn ? "lamp-illuminated" : "lamp-dimmed"}`} ref={containerRef}>
-      {/* Hanging Lamp with Bright Glowing Bulb from Image 4 & 5 */}
+      {/* Hanging 3D Conical Lamp with Tucked-in Bright Bulb (Image 5) */}
       <div
         className={`stage-lamp ${isLampOn ? "lamp-on" : "lamp-off"}`}
         onClick={() => setIsLampOn(!isLampOn)}
         title="Click to toggle lamp illumination"
       >
         <div className="lamp-wire" />
-        <div className="lamp-cap" />
-        <div className="lamp-shade" />
-        <div className="lamp-bulb-socket" />
+        <div className="lamp-cap-top" />
+        <div className="lamp-cap-bottom" />
+        <div className="lamp-shade-body" />
+        <div className="lamp-rim-opening" />
         <div className="lamp-bulb" />
         <div className="lamp-bulb-glow" />
         <div className="lamp-beam" />

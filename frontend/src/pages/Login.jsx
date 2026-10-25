@@ -47,6 +47,7 @@ const Login = ({ onLogin }) => {
           throw loginErr;
         }
       }
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       onLogin(data.token);
       navigate("/dashboard");
     } catch (err) {
@@ -64,6 +65,8 @@ const Login = ({ onLogin }) => {
 
     try {
       const data = await login(email, password);
+      // Run 5 second celebration animation matching user requirement
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       onLogin(data.token);
       navigate("/dashboard");
     } catch (err) {
@@ -107,7 +110,6 @@ const Login = ({ onLogin }) => {
           <h1 className="char-auth-title">
             Welcome <span className="char-title-accent">Back.</span>
           </h1>
-          <p className="char-auth-subtitle">Pull the cord to illuminate your path</p>
 
           {error && (
             <div className="char-auth-error-alert">
