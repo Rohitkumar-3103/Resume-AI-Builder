@@ -111,9 +111,13 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
   const [isLampOn, setIsLampOn] = useState(true);
   const [isPullingCord, setIsPullingCord] = useState(false);
 
-  const handleToggleLamp = () => {
+  const handleToggleLamp = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setIsPullingCord(true);
-    setTimeout(() => setIsPullingCord(false), 240);
+    setTimeout(() => setIsPullingCord(false), 280);
     setIsLampOn(prev => !prev);
   };
 
@@ -133,7 +137,13 @@ const AnimatedCharacters = ({ activeField, isPasswordShown, isLoading = false, i
         <div className="lamp-bulb" />
         <div className="lamp-bulb-glow" />
         {isLampOn && <div className="lamp-beam" />}
-        <div className="lamp-pull-cord" onClick={handleToggleLamp}>
+        <div
+          className="lamp-pull-cord"
+          onClick={handleToggleLamp}
+          title="Pull cord to toggle light"
+          role="button"
+          tabIndex={0}
+        >
           <div className="cord-wire" />
           <div className="cord-ball" />
         </div>
