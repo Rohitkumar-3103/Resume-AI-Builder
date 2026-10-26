@@ -51,6 +51,7 @@ ResumeCraft (Resume AI Builder)/
     │   └── iiit_allahabad.png  # University emblem for academic cover pages
     ├── src/
     │   ├── components/
+    │   │   ├── AnimatedCharacters.jsx # 4 expressive characters & 3D hanging ceiling lamp stage
     │   │   ├── Navbar.jsx          # Centered pill header with navigation, theme toggle & auth actions
     │   │   ├── CoverPreview.jsx    # 6 academic templates with live A4 rendering & IIIT Allahabad branding
     │   │   ├── AIDetectorModal.jsx # GPTZero-style AI Authenticity Detector & Humanizer modal
@@ -65,8 +66,8 @@ ResumeCraft (Resume AI Builder)/
     │   │   ├── InterviewCoach.jsx  # AI Mock Interview Coach (STAR behavioral & technical questions)
     │   │   ├── CareerPlaybook.jsx  # 100+ action verbs directory, XYZ formulas, and ATS golden rules
     │   │   ├── Editor.jsx          # Live split-screen visual editor with PDF/Word download
-    │   │   ├── Login.jsx           # Clean authentication sign-in
-    │   │   └── Register.jsx        # Clean authentication sign-up
+    │   │   ├── Login.jsx           # Cyberpunk auth sign-in with interactive character stage
+    │   │   └── Register.jsx        # Cyberpunk auth sign-up with interactive character stage
     │   ├── services/
     │   │   └── api.js              # Axios client wrappers with automatic JWT Authorization header
     │   ├── utils/
@@ -89,6 +90,12 @@ ResumeCraft (Resume AI Builder)/
                      ┌────────────────────┴────────────────────┐
                      ▼                                         ▼
              [Register Page]                             [Login Page]
+       (Interactive 4-Character Stage)            (Interactive 4-Character Stage)
+       • Staged Slide-In Entrance                 • Staged Slide-In Entrance
+         (1st Lamp Down, 2nd 4 Colors Up)           (1st Lamp Down, 2nd 4 Colors Up)
+       • Real-Time Mouse Tracking (atan2)         • Real-Time Mouse Tracking (atan2)
+       • Password Paw Hide / Peek States          • Password Paw Hide / Peek States
+       • 5-Sec Celebration Loading Dance          • 5-Sec Celebration Loading Dance
                      │                                         │
                      └────────────► [JWT Issued] ◄─────────────┘
                                           │
@@ -238,6 +245,37 @@ React Client (/templates) ──► Template Selection ──► React Client (/
 - **3-Slide Gallery Grid**: 3-column template showcase (`repeat(3, minmax(0, 1fr))`) rendering all 6 academic templates cleanly.
 - **Live A4 Form-Builder**: Live split-screen with instant PDF vector export powered by `html2pdf.js`.
 - **Institutional Identity**: Pre-configured with **Indian Institute of Information Technology Allahabad** emblem and configurable for any academic institution.
+
+### 4. Cyberpunk Animated Character Stage & Optics Engine
+- **3-Tier Decoupled SVG Pipeline**:
+  - *Layer 1 (Entrance)*: `.char-*-entrance` handles the spring slide-up from beneath the floor (`translateY(340px)` ➔ `translateY(0)`).
+  - *Layer 2 (Alive Breathing)*: `.char-*-alive` handles the continuous, subtle breathing and swaying loops.
+  - *Layer 3 (Mouse Tracking & Tilts)*: `.char-*` handles real-time rotational tilts (`rotate(${tilt}deg)`), celebration jumping, and paw positioning without animation conflict.
+- **Trigonometric Math Engine (`Math.atan2`)**:
+  - Computes dynamic polar angles `Math.atan2(dy, dx)` relative to the stage center point.
+  - Clamps radius with `Math.hypot` to limit maximum pupil displacement (`6.8px`).
+  - Normalizes viewport coordinate deltas to drive responsive body rotation:
+    - Purple: &plusmn;4&deg;
+    - Pink: &plusmn;6&deg;
+    - Orange: &plusmn;3.5&deg; with organic squish/stretch
+    - Yellow: &plusmn;8&deg; body tilt with &plusmn;20&deg; seesaw beak rotation
+- **Staged Slide Entrance Choreography**:
+  - *1st Movement (Lamp Down)*: Hanging 3D lamp drops from above (`translateY(-140px)` ➔ `translateY(0)`) at `0.0s` with cubic-bezier spring easing.
+  - *Beam Bloom*: Conical light beam flares downward from the shade rim at `0.25s`.
+  - *2nd Movement (4 Colors Up)*: Staggered sequence popping up into the spotlight:
+    - 🟣 Purple: `0.42s`
+    - 🔴 Pink: `0.52s`
+    - 🟡 Yellow: `0.62s`
+    - 🟠 Orange: `0.72s`
+- **Lighting Optics & Pull Cord Mechanics**:
+  - 3D Conical metallic shade (`polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%)`) with layered socket cap and elliptical under-rim opening (`92px`).
+  - Conical light beam positioned at `top: 78px` with aperture `clip-path: polygon(42.5% 0%, 57.5% 0%, 100% 100%, 0% 100%)` (width `66px`), perfectly tucked 13px inside the shade rim opening to eliminate side artifacts.
+  - Interactive pull cord with expanded **38&times;76px** click hitbox (`z-index: 12`), `e.stopPropagation()` event bubbling guard, hover glow enlargement, and `16px` spring pull animation.
+  - Complete light shut-off state (`display: none !important; opacity: 0 !important;`) that extinguishes the light beam, floor glow, and dims characters into ambient darkness.
+- **Cyberpunk Auth Form UI**:
+  - Gliding indicator arrow (`◀`) that slides smoothly between active inputs via CSS cubic-bezier transition.
+  - Floating sparkle particles (`.btn-sparkle`) around neon gradient submit buttons.
+  - Seamless Dark & Light theme overrides with Chrome `-webkit-autofill` background color protection.
 
 ---
 

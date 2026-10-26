@@ -67,6 +67,26 @@ ResumeCraft empowers job seekers and students to build recruiter-grade resumes, 
 - Quick search and filtering across saved resumes by template category.
 - Color-coded action buttons for every document: **Match JD** (Emerald Green), **AI Audit** (Violet), and **Delete** (Coral Red).
 
+### 9. 🎭 Interactive Animated Character Stage & Cyberpunk Neon Auth System
+- **4 Expressive Characters (Purple, Pink, Yellow, Orange)**:
+  - **Trigonometric Mouse Cursor Tracking**: Real-time pupil tracking across the screen using `Math.atan2`, paired with body tilts and Yellow's seesaw beak rotation.
+  - **3-Tier Decoupled SVG Architecture**: Nested layers separate slide-up entrance animations, continuous organic breathing loops, and live cursor tilts so motions never conflict.
+  - **Interactive State Reactions**:
+    - *Password Hidden*: Purple covers its eyes with paws and Pink looks away shyly.
+    - *Password Visible*: Purple peeks through paws with rosy blushing cheeks and happy smile.
+    - *Typing*: Character mouths and beaks chatter dynamically in sync with input keystrokes.
+    - *5-Second Celebration Dance*: Bouncing jumps, raised cheering arms, and floating twinkling star particles upon Sign In / Sign Up submission.
+- **Hanging 3D Conical Ceiling Lamp & Optics**:
+  - Layered metallic cap socket, 3D conical shade, and tucked-in bright cyan bulb dome with radial bloom.
+  - **Staged Slide Entrance Choreography**:
+    - *Phase 1*: Lamp smoothly slides down from the ceiling (`translateY(-140px)` ➔ `translateY(0)`).
+    - *Phase 2*: 4 characters slide up into position from beneath the stage floor (`translateY(340px)` ➔ `translateY(0)`) in a staggered sequence.
+  - **Interactive Pull Cord & Hitbox**: Generous 38&times;76px clickable hitbox with 16px spring pull animation and complete light shut-off state (`display: none !important; opacity: 0 !important`).
+- **Cyberpunk Auth Form UI**:
+  - Gliding neon arrow indicator (`◀`) tracking active input fields with spring physics.
+  - Floating animated sparkles around glowing gradient submit pill buttons.
+  - Full Dark & Light theme overrides with Chrome `-webkit-autofill` background color preservation.
+
 ---
 
 ## 🛠️ Architecture & Tech Stack
@@ -75,15 +95,15 @@ ResumeCraft empowers job seekers and students to build recruiter-grade resumes, 
 ResumeCraft (Resume AI Builder)
 ├── backend/
 │   ├── routes/
-│   │   ├── aiRoutes.js       # Gemini Flash endpoints (ATS Matcher, Parser, Coach, Detector)
-│   │   ├── authRoutes.js     # JWT Registration & Login with bcryptjs
-│   │   └── resumeRoutes.js   # Owner-secured CRUD and profile picture uploads
+│   │   ├── aiRoutes.js          # Gemini Flash endpoints (ATS Matcher, Parser, Coach, Detector)
+│   │   ├── authRoutes.js        # JWT Registration & Login with bcryptjs
+│   │   └── resumeRoutes.js      # Owner-secured CRUD and profile picture uploads
 │   ├── models/
-│   │   ├── Resume.js         # Comprehensive Resume schema
-│   │   └── User.js           # User credentials schema
+│   │   ├── Resume.js            # Comprehensive Resume schema
+│   │   └── User.js              # User credentials schema
 │   ├── utils/
-│   │   └── ipv4Fetch.js      # Robust network fetch with DNS resolution
-│   └── server.js             # Express app entry point (Port 5001)
+│   │   └── ipv4Fetch.js         # Robust network fetch with DNS resolution
+│   └── server.js                # Express app entry point (Port 5001)
 │
 └── frontend/
     └── src/
@@ -96,10 +116,11 @@ ResumeCraft (Resume AI Builder)
         │   ├── InterviewCoach.jsx   # AI Mock Interview Coach
         │   ├── CareerPlaybook.jsx   # Tips & Action Verbs Playbook
         │   ├── Editor.jsx           # Live split-screen Resume Builder
-        │   ├── Login.jsx            # Authentication: Sign In
-        │   └── Register.jsx         # Authentication: Sign Up
+        │   ├── Login.jsx            # Authentication: Sign In with interactive stage
+        │   └── Register.jsx         # Authentication: Sign Up with interactive stage
         ├── components/
-        │   ├── Navbar.jsx           # Floating pill header with theme toggle & auth
+        │   ├── AnimatedCharacters.jsx # 4 expressive characters & 3D hanging lamp stage
+        │   ├── Navbar.jsx           # Floating pill header with theme toggle & Sign In pill button
         │   ├── CoverPreview.jsx     # 6 academic templates with live A4 rendering
         │   ├── AIDetectorModal.jsx  # Authenticity scanner & humanizer modal
         │   ├── ResumeForm.jsx       # Multi-section editor accordion
