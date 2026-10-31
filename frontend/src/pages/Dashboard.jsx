@@ -267,7 +267,7 @@ const Dashboard = () => {
               </div>
 
               <div className="template-pills-row">
-                {["All", "Modern", "Minimalist", "Creative", "Executive"].map((tmpl) => (
+                {["All", "Modern", "Minimalist", "Creative", "Executive", "Classic", "Technical", "Elegant", "Compact", "Timeline"].map((tmpl) => (
                   <button
                     key={tmpl}
                     onClick={() => setSelectedTemplateFilter(tmpl)}

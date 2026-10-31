@@ -299,7 +299,12 @@ const ResumeForm = ({ resumeData, setResumeData, onOpenAIDetector }) => {
     { id: "Modern", title: "Modern Professional", badge: "Balanced", desc: "Two-column layout with header accent and optimal space efficiency." },
     { id: "Minimalist", title: "Minimalist Clean", badge: "ATS Best", desc: "Single-column classic hierarchy with flawless ATS readability." },
     { id: "Creative", title: "Creative Tech", badge: "Modern", desc: "Distinctive accent sidebar with tech tag layout and photo support." },
-    { id: "Executive", title: "Executive Split", badge: "Senior", desc: "Full-bleed left colored sidebar for high-density executive profiles." }
+    { id: "Executive", title: "Executive Split", badge: "Senior", desc: "Full-bleed left colored sidebar for high-density executive profiles." },
+    { id: "Classic", title: "Classic Corporate", badge: "Formal", desc: "Traditional serif single-column structure with elegant horizontal dividers." },
+    { id: "Technical", title: "Technical Developer", badge: "Engineering", desc: "Developer-first layout with monospace tech stacks and project links." },
+    { id: "Elegant", title: "Elegant Border", badge: "Refined", desc: "Framed layout with header accent line, serif titles, and balanced typography." },
+    { id: "Compact", title: "Compact One-Page", badge: "High Density", desc: "Streamlined single-page hierarchy engineered to fit extensive experience." },
+    { id: "Timeline", title: "Timeline Career", badge: "Progressive", desc: "Chronological vertical timeline rail illustrating sustained career growth." }
   ];
 
   const themeColors = [
@@ -366,6 +371,11 @@ const ResumeForm = ({ resumeData, setResumeData, onOpenAIDetector }) => {
                       <option value="Minimalist">Minimalist / Clean</option>
                       <option value="Creative">Creative / Tech</option>
                       <option value="Executive">Executive / Double-Column</option>
+                      <option value="Classic">Classic Corporate</option>
+                      <option value="Technical">Technical Developer</option>
+                      <option value="Elegant">Elegant Border</option>
+                      <option value="Compact">Compact One-Page</option>
+                      <option value="Timeline">Timeline Career</option>
                     </select>
                   </div>
 

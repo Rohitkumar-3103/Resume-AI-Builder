@@ -97,6 +97,10 @@ const Navbar = ({ token, onLogout, theme, onToggleTheme }) => {
             </div>
           ) : (
             <div className="navbar-guest-actions">
+              <Link to="/templates" className={`nav-link-item ${isActive("/templates")}`}>
+                <span className="nav-icon">🎨</span>
+                <span>Templates</span>
+              </Link>
               <button 
                 onClick={onToggleTheme} 
                 className="theme-toggle-btn" 
@@ -153,6 +157,9 @@ const Navbar = ({ token, onLogout, theme, onToggleTheme }) => {
               </>
             ) : (
               <>
+                <Link to="/templates" className={`mobile-nav-item ${isActive("/templates")}`}>
+                  <span className="nav-icon">🎨</span> Templates
+                </Link>
                 <Link to="/login" className={`mobile-nav-item ${isActive("/login")}`}>
                   <span className="nav-icon">🔑</span> Sign In
                 </Link>

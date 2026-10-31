@@ -11208,3 +11208,326 @@ body.light-theme .char-input-wrap input:-webkit-autofill:focus {
     padding: 28px 20px;
   }
 }
+
+/* ==========================================================================
+   EXPANDED RESUME TEMPLATES (CLASSIC, TECHNICAL, ELEGANT, COMPACT, TIMELINE)
+   ========================================================================== */
+
+/* TEMPLATE 5: CLASSIC CORPORATE (Serif, Formal, Clean Horizontal Dividers) */
+.template-classic-content {
+  padding: 2.8rem 3rem;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #111827;
+}
+
+.header-classic {
+  text-align: center;
+  border-bottom: 2px solid var(--theme-color);
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.8rem;
+}
+
+.header-classic .preview-name {
+  font-family: 'Georgia', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #111827;
+  margin: 0;
+}
+
+.header-classic .preview-headline {
+  font-family: 'Georgia', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: #4b5563;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.classic-contact {
+  justify-content: center;
+  gap: 1.2rem;
+  font-size: 0.88rem;
+  color: #4b5563;
+}
+
+.template-classic-content .section-title {
+  font-family: 'Georgia', serif;
+  font-variant: small-caps;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  color: #111827;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+.template-classic-content .exp-role,
+.template-classic-content .edu-degree,
+.template-classic-content .proj-title {
+  font-family: 'Georgia', serif;
+  font-size: 1.05rem;
+}
+
+/* TEMPLATE 6: TECHNICAL DEVELOPER (Skills-first, Mono Tech Badges, Dev Focus) */
+.template-technical-content {
+  padding: 2.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #0f172a;
+}
+
+.header-technical {
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.6rem;
+}
+
+.technical-header-top {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.technical-header-top .preview-name {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.technical-header-top .preview-headline {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+.technical-contact {
+  gap: 1.2rem;
+  font-size: 0.88rem;
+  color: #475569;
+}
+
+.template-technical-content .section-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--theme-color);
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.template-technical-content .skill-tag-item {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+}
+
+.template-technical-content .proj-tech {
+  font-family: monospace;
+  font-size: 0.8rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  color: var(--theme-color);
+}
+
+/* TEMPLATE 7: ELEGANT BORDER (Refined Top/Bottom Color Bands, Framed) */
+.template-elegant-content {
+  position: relative;
+  padding: 2.6rem 2.8rem;
+  color: #1e293b;
+}
+
+.elegant-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+}
+
+.elegant-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+}
+
+.header-elegant {
+  text-align: center;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header-elegant .preview-name {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+  margin: 0;
+}
+
+.header-elegant .preview-headline {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--theme-color);
+  margin-top: 0.35rem;
+  margin-bottom: 0.6rem;
+}
+
+.elegant-contact {
+  justify-content: center;
+  gap: 1.2rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.template-elegant-content .section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0f172a;
+  border-bottom: 1.5px solid var(--theme-color);
+  padding-bottom: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+/* TEMPLATE 8: COMPACT ONE-PAGE (High-density, Space Efficient) */
+.template-compact-content {
+  padding: 1.8rem 2.2rem;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: #1f2937;
+}
+
+.header-compact {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--theme-color);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.header-compact .preview-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+  color: #111827;
+}
+
+.header-compact .preview-headline {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0.2rem 0 0;
+}
+
+.compact-contact {
+  font-size: 0.8rem;
+  color: #4b5563;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.compact-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 1.5rem;
+}
+
+.template-compact-content .section-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #111827;
+  border-bottom: 1px solid #d1d5db;
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.65rem;
+}
+
+.template-compact-content .experience-item,
+.template-compact-content .education-item,
+.template-compact-content .project-item {
+  margin-bottom: 0.75rem;
+}
+
+/* TEMPLATE 9: TIMELINE CAREER (Visual Timeline Spine) */
+.template-timeline-content {
+  padding: 2.5rem;
+  color: #1e293b;
+}
+
+.header-timeline {
+  padding-left: 1.2rem;
+  margin-bottom: 1.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-timeline .preview-name {
+  font-size: 2.1rem;
+  font-weight: 800;
+  margin: 0;
+  color: #0f172a;
+}
+
+.header-timeline .preview-headline {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--theme-color);
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-contact {
+  gap: 1rem;
+  font-size: 0.86rem;
+  color: #64748b;
+}
+
+.timeline-spine {
+  position: relative;
+  border-left: 2px solid var(--theme-color);
+  margin-left: 0.6rem;
+  padding-left: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.template-timeline-content .experience-item,
+.template-timeline-content .education-item,
+.template-timeline-content .project-item {
+  position: relative;
+  margin-bottom: 1.2rem;
+}
+
+.template-timeline-content .experience-item::before,
+.template-timeline-content .education-item::before,
+.template-timeline-content .project-item::before {
+  content: "";
+  position: absolute;
+  left: -1.82rem;
+  top: 0.35rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--theme-color);
+  box-shadow: 0 0 0 3px #ffffff;
+}

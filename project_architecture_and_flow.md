@@ -1,6 +1,6 @@
 # ResumeCraft (Resume AI Builder) — Architecture & System Flow
 
-This document details the completed project structure, authentication design, full-stack data flow pipelines, and component architecture for **ResumeCraft** (AI Career Suite, ATS Engine & Academic CoverCraft).
+This document details the completed project structure, authentication design, full-stack data flow pipelines, component architecture, and 10-parameter scoring methodology for **ResumeCraft** (AI Career Suite, ATS Engine & Academic CoverCraft).
 
 ---
 
@@ -30,10 +30,11 @@ ResumeCraft (Resume AI Builder)/
 │   ├── routes/
 │   │   ├── authRoutes.js       # Register (/api/auth/register) & Login (/api/auth/login)
 │   │   ├── resumeRoutes.js     # Owner-secured CRUD and Multer photo upload route
-│   │   └── aiRoutes.js         # Gemini Flash endpoints (ATS Matcher, Parser, Coach, Humanizer, Detector)
+│   │   └── aiRoutes.js         # Gemini Flash endpoints (ATS Matcher, Parser, 10-Param Scoring, Coach, Humanizer, Detector)
 │   ├── uploads/                # Serves static profile pictures
 │   ├── utils/
-│   │   └── ipv4Fetch.js        # Robust network fetch utility with DNS IPv4 resolution
+│   │   ├── ipv4Fetch.js        # Robust network fetch utility with DNS IPv4 resolution
+│   │   └── resumeScorer.js     # Deterministic & Explainable 10-Parameter Scoring Engine
 │   ├── test/                   # Automated API test suites (ai, backend, detection, upload)
 │   ├── .env                    # PORT, MONGO_URI, JWT_SECRET, GEMINI_API_KEY
 │   ├── server.js               # Main Express entry point (Port 5001)
@@ -51,21 +52,24 @@ ResumeCraft (Resume AI Builder)/
     │   └── iiit_allahabad.png  # University emblem for academic cover pages
     ├── src/
     │   ├── components/
-    │   │   ├── AnimatedCharacters.jsx # 4 expressive characters & 3D hanging ceiling lamp stage
-    │   │   ├── Navbar.jsx          # Centered pill header with navigation, theme toggle & auth actions
-    │   │   ├── CoverPreview.jsx    # 6 academic templates with live A4 rendering & IIIT Allahabad branding
-    │   │   ├── AIDetectorModal.jsx # GPTZero-style AI Authenticity Detector & Humanizer modal
-    │   │   ├── ResumeForm.jsx      # Multi-section resume input editor
-    │   │   └── ResumePreview.jsx   # Real-time resume layout engine (Modern, Minimalist, Creative, Executive)
+    │   │   ├── AnimatedCharacters.jsx   # 4 expressive characters & 3D hanging ceiling lamp stage
+    │   │   ├── Navbar.jsx               # Centered pill header with navigation, theme toggle & auth actions
+    │   │   ├── CoverPreview.jsx         # 6 academic templates with live A4 rendering & IIIT Allahabad branding
+    │   │   ├── AIDetectorModal.jsx      # GPTZero-style AI Authenticity Detector & Humanizer modal
+    │   │   ├── ResumeForm.jsx           # Multi-section resume input editor (9 ATS template cards)
+    │   │   ├── ResumePreview.jsx        # Real-time resume layout engine (9 native ATS layouts)
+    │   │   ├── ResumeProcessingHub.jsx  # Animated 3-step scanner & 5-stage recruiter checklist
+    │   │   ├── ResumeAnalysisSection.jsx# 10-Parameter explainable score dashboard
+    │   │   └── HowItWorksSection.jsx    # Visual user journey walkthrough
     │   ├── pages/
     │   │   ├── Dashboard.jsx       # Command Center: Career Readiness gauge, 3 AI module cards, and document workspace
     │   │   ├── ATSBeater.jsx       # ATS Keyword Matcher, Semantic Scorer & Before/After comparison
-    │   │   ├── ResumeParser.jsx    # Drag-and-drop PDF/DOCX file uploader & structured extraction
+    │   │   ├── ResumeParser.jsx    # Drag-and-drop PDF/DOCX uploader, Processing Hub & 10-Parameter Report
     │   │   ├── CoverTemplates.jsx  # Academic CoverCraft 3-column template showcase gallery
     │   │   ├── CoverPageBuilder.jsx# Live Academic Cover Page Generator with solo/group & instant PDF export
     │   │   ├── InterviewCoach.jsx  # AI Mock Interview Coach (STAR behavioral & technical questions)
     │   │   ├── CareerPlaybook.jsx  # 100+ action verbs directory, XYZ formulas, and ATS golden rules
-    │   │   ├── Editor.jsx          # Live split-screen visual editor with PDF/Word download
+    │   │   ├── Editor.jsx          # Live split-screen visual editor (9 templates) with PDF/Word download
     │   │   ├── Login.jsx           # Cyberpunk auth sign-in with interactive character stage
     │   │   └── Register.jsx        # Cyberpunk auth sign-up with interactive character stage
     │   ├── services/
@@ -107,16 +111,16 @@ ResumeCraft (Resume AI Builder)/
         │              │                  │                  │                  │
         ▼              ▼                  ▼                  ▼                  ▼
  [Resume Builder] [ATS Matcher]   [Resume Parser]    [CoverCraft Suite]  [Interview Coach]
-  (Create/Edit)    (ATS Beater)     (PDF / DOCX)     (/templates & create) (Mock STAR Prep)
+  (9 Templates)    (ATS Beater)     (PDF / DOCX)     (/templates & create) (Mock STAR Prep)
         │              │                  │                  │                  │
         │              ├─ Keyword Gaps    ├─ Stream Parse    ├─ 6 Academic      └─ Behavioral &
-        │              ├─ Semantic Fit    └─ 1-Click Import     Templates          Technical Qs
-        │              └─ Before/After       to Builder      ├─ Solo / Group
-        │                 Boost (+32%)                       ├─ IIIT Allahabad
-        │                                                    └─ Instant PDF
-        ▼                                                               │
-  [Live Preview]                                                        ▼
-        │                                                    [Download Cover PDF]
+        │              ├─ Semantic Fit    ├─ Processing Hub     Templates          Technical Qs
+        │              └─ Before/After       (3-Step Radar)  ├─ Solo / Group
+        │                 Boost (+32%)    ├─ 10-Param Score  ├─ IIIT Allahabad
+        │                                 │  Dashboard       └─ Instant PDF
+        │                                 └─ 1-Click Import                     │
+        ▼                                    to Builder                         ▼
+  [Live Preview]                                                        [Download Cover PDF]
   ┌─────┴────────────────┐
   ▼                      ▼
  [Download PDF]    [Download Word]
@@ -156,21 +160,26 @@ React Client (ATSBeater.jsx)           Express (/api/ai/match-ats)         Googl
              ▼                                      ▼                             ▼
 ```
 
-### 3. PDF/DOCX Resume Upload & Parsing Pipeline
+### 3. PDF/DOCX Resume Upload & 10-Parameter Scoring Pipeline
 ```text
-React Client (ResumeParser.jsx)        Express (/api/ai/parse-resume-file)      Gemini AI
-             │                                      │                              │
-             ├─── 1. Multipart File Upload ────────►│                              │
-             │    (.pdf, .docx, .txt)               ├── 2. Extract Raw Text Buffer │
-             │                                      │   (pdf-parse / mammoth)      │
-             │                                      ├── 3. Parse Entities Prompt ─►│
-             │                                      │◄─ 4. Structured Resume JSON ─┤
-             │◄── 5. Clean Extracted Sections ──────┤                              │
-             │    - Personal Info, Summary          │                              │
-             │    - Skills, Experience, Education   │                              │
-             │    - Key Projects                    │                              │
-             ├─── 6. [1-Click] Save to DB ─────────►│ (Stored into Resume Model)   │
-             ▼                                      ▼                              ▼
+React Client (ResumeParser.jsx)        Express (/api/ai/parse-resume-file)      Gemini AI & Scorer
+             │                                      │                                  │
+             ├─── 1. Multipart File Upload ────────►│                                  │
+             │    (.pdf, .docx, .txt)               ├── 2. Extract Raw Text Buffer     │
+             │                                      │   (Universal extractPdfText)     │
+             │                                      ├── 3. Gemini Entity Structuring ─►│
+             │                                      │◄─ 4. Structured JSON Response ───┤
+             │                                      ├── 5. calculateExplainableScore() │
+             │                                      │   - 10 Recruiting Parameters     │
+             │                                      │   - Exact Numerical Scores       │
+             │                                      │   - Strengths, Top Fixes, Summary│
+             │◄── 6. Complete Score & Data Payload ─┤                                  │
+             ├─── 7. Render Processing Hub & Score  │                                  │
+             │    - 3-Step Scanner (100%)           │                                  │
+             │    - 10 Parameter Pills with Badges  │                                  │
+             │    - Interactive Tooltip Bar         │                                  │
+             ├─── 8. [1-Click] Save to DB ─────────►│ (Stored into Resume Model)       │
+             ▼                                      ▼                                  ▼
 ```
 
 ### 4. Academic Cover Page Pipeline (CoverCraft)
@@ -199,6 +208,41 @@ React Client (/templates) ──► Template Selection ──► React Client (/
 
 ---
 
+## 📊 The 10-Parameter Explainable Scoring Engine
+
+The scoring system evaluates candidate resumes against 10 explicit recruiting parameters (`backend/utils/resumeScorer.js`):
+
+| # | Parameter ID | Display Name | What It Audits | Score Thresholds |
+|---|---|---|---|---|
+| **1** | `projects` | **Projects** | Scope, tech stack clarity, live deployment links, GitHub repos | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **2** | `tech-skills` | **Technical Skills** | Programming languages, frameworks, cloud, tooling keywords | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **3** | `education` | **Education** | Degree relevance, institution pedigree, timeline, GPA | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **4** | `experience` | **Experience & Internships** | Professional work history, ownership, duration, role progression | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **5** | `achievements` | **Achievements & Certifications** | Competitions, hackathons, cloud certifications, scholarships | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **6** | `impact` | **Impact & Quantification** | Quantified metrics (%, $, time saved, latency reduction, XYZ) | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **7** | `brevity` | **Brevity & Concision** | Signal-to-noise ratio, eliminating fluff sentences, word count | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **8** | `style` | **Style & Consistency** | Uniform date formatting, bullet punctuation, typography | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **9** | `ats` | **ATS & Formatting** | Standard section headings, single/double column parser compatibility | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+| **10** | `language` | **Language & Spelling** | Grammar, active voice, replacing weak passive verbs with action verbs | $\ge 80$ Good, $\ge 65$ Polish, $< 65$ Work |
+
+---
+
+## 🎨 9 ATS Resume Templates in Live Builder
+
+| # | ID | Name | Layout Structure | Target Roles |
+|---|---|---|---|---|
+| **1** | `Modern` | **Modern Professional** | Balanced 2-column with accent header | Full Stack, PM, Business |
+| **2** | `Minimalist` | **Minimalist Clean** | Classic single-column linear hierarchy | Corporate, Legal, General ATS |
+| **3** | `Creative` | **Creative Tech** | Left accent sidebar with tech tags & photo | Design, Frontend, Mobile |
+| **4** | `Executive` | **Executive Split** | Full-bleed colored sidebar with high density | Senior Leads, Directors |
+| **5** | `Classic` | **Classic Corporate** | Traditional serif (Georgia) with divider rules | Finance, Consulting, Academia |
+| **6** | `Technical` | **Technical Developer** | Skill-first layout with monospace tech badges | Software Engineers, DevOps, Data |
+| **7** | `Elegant` | **Elegant Border** | Framed layout with accent bands & refined typography | Marketing, Operations, Product |
+| **8** | `Compact` | **Compact One-Page** | High-density layout engineered for 1-page fit | High-experience candidates |
+| **9** | `Timeline` | **Timeline Career** | Vertical timeline connector rail on experience | Progressive career milestones |
+
+---
+
 ## 🌐 API Endpoints Reference
 
 | Method | Endpoint | Protection | Description |
@@ -211,7 +255,7 @@ React Client (/templates) ──► Template Selection ──► React Client (/
 | `PUT` | `/api/resumes/:id` | JWT Bearer | Update existing resume document |
 | `DELETE` | `/api/resumes/:id` | JWT Bearer | Delete resume document |
 | `POST` | `/api/resumes/upload` | JWT Bearer | Upload profile photo (Multer) |
-| `POST` | `/api/ai/parse-resume-file` | JWT Bearer | In-memory PDF/DOCX buffer parsing & Gemini structuring |
+| `POST` | `/api/ai/parse-resume-file` | Optional Auth | Resilient PDF/DOCX buffer parsing & 10-Parameter Scoring |
 | `POST` | `/api/ai/match-ats` | JWT Bearer | ATS screening scoring, keyword gaps, and Before/After boost |
 | `POST` | `/api/ai/interview-prep` | JWT Bearer | Mock interview questions with STAR answers |
 | `POST` | `/api/ai/detect` | JWT Bearer | AI authenticity scoring & cliché auditor |
@@ -220,62 +264,6 @@ React Client (/templates) ──► Template Selection ──► React Client (/
 | `POST` | `/api/ai/generate-experience` | JWT Bearer | Position-based bullet points generator |
 | `POST` | `/api/ai/generate-cover-letter`| JWT Bearer | Tailored cover letter body generator |
 | `GET` | `/api/ai/career-playbook` | Public | 100+ power verbs, XYZ formulas, and ATS rules |
-
----
-
-## 🎨 UI & Design System Architecture
-
-### 1. Dashboard Command Center
-- **Career Readiness Widget**: Circular SVG gauge calculating live ATS readiness score, tracked resumes, and connected AI models.
-- **Flagship AI Modules (Trio Cards)**:
-  - **ATS Keyword Matcher** (`card-ats-beater`): Emerald Green accent (`#10b981`), `HOT • ATS BEATER` badge.
-  - **Resume Upload & Parser** (`card-parser`): Royal Blue accent (`#3b82f6`), `INSTANT IMPORT` badge.
-  - **Academic Cover Page Generator** (`card-covercraft`): Energetic Orange accent (`#ea580c` / `#f97316`), `NEW • COVERCRAFT` badge.
-- **Document Workspace**:
-  - Live search and category filters (`All`, `Modern`, `Minimalist`, `Creative`, `Executive`).
-  - Document sheet preview with real-time candidate data and initials badge.
-  - Vibrant Light/Dark action buttons: **Edit in Builder** (Blue), **Match JD** (Emerald `#059669`), **AI Audit** (Violet `#7c3aed`), and **Delete** (Crimson `#dc2626`).
-
-### 2. Floating Navbar & Navigation Capsule
-- **Left**: Transparent RGBA brand logo with glowing hover aura.
-- **Center Capsule**: Floating pill navigation containing `📊 Dashboard`, `🎨 Templates`, `🎯 ATS Matcher AI`, and `📤 Parse File`.
-- **Right**: Primary `+ Create Resume` gradient button, `Dark / Light` theme toggle, and styled red `Logout` button.
-
-### 3. Academic CoverCraft Suite (`/templates` & `/create`)
-- **3-Slide Gallery Grid**: 3-column template showcase (`repeat(3, minmax(0, 1fr))`) rendering all 6 academic templates cleanly.
-- **Live A4 Form-Builder**: Live split-screen with instant PDF vector export powered by `html2pdf.js`.
-- **Institutional Identity**: Pre-configured with **Indian Institute of Information Technology Allahabad** emblem and configurable for any academic institution.
-
-### 4. Cyberpunk Animated Character Stage & Optics Engine
-- **3-Tier Decoupled SVG Pipeline**:
-  - *Layer 1 (Entrance)*: `.char-*-entrance` handles the spring slide-up from beneath the floor (`translateY(340px)` ➔ `translateY(0)`).
-  - *Layer 2 (Alive Breathing)*: `.char-*-alive` handles the continuous, subtle breathing and swaying loops.
-  - *Layer 3 (Mouse Tracking & Tilts)*: `.char-*` handles real-time rotational tilts (`rotate(${tilt}deg)`), celebration jumping, and paw positioning without animation conflict.
-- **Trigonometric Math Engine (`Math.atan2`)**:
-  - Computes dynamic polar angles `Math.atan2(dy, dx)` relative to the stage center point.
-  - Clamps radius with `Math.hypot` to limit maximum pupil displacement (`6.8px`).
-  - Normalizes viewport coordinate deltas to drive responsive body rotation:
-    - Purple: &plusmn;4&deg;
-    - Pink: &plusmn;6&deg;
-    - Orange: &plusmn;3.5&deg; with organic squish/stretch
-    - Yellow: &plusmn;8&deg; body tilt with &plusmn;20&deg; seesaw beak rotation
-- **Staged Slide Entrance Choreography**:
-  - *1st Movement (Lamp Down)*: Hanging 3D lamp drops from above (`translateY(-140px)` ➔ `translateY(0)`) at `0.0s` with cubic-bezier spring easing.
-  - *Beam Bloom*: Conical light beam flares downward from the shade rim at `0.25s`.
-  - *2nd Movement (4 Colors Up)*: Staggered sequence popping up into the spotlight:
-    - 🟣 Purple: `0.42s`
-    - 🔴 Pink: `0.52s`
-    - 🟡 Yellow: `0.62s`
-    - 🟠 Orange: `0.72s`
-- **Lighting Optics & Pull Cord Mechanics**:
-  - 3D Conical metallic shade (`polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%)`) with layered socket cap and elliptical under-rim opening (`92px`).
-  - Conical light beam positioned at `top: 78px` with aperture `clip-path: polygon(42.5% 0%, 57.5% 0%, 100% 100%, 0% 100%)` (width `66px`), perfectly tucked 13px inside the shade rim opening to eliminate side artifacts.
-  - Interactive pull cord with expanded **38&times;76px** click hitbox (`z-index: 12`), `e.stopPropagation()` event bubbling guard, hover glow enlargement, and `16px` spring pull animation.
-  - Complete light shut-off state (`display: none !important; opacity: 0 !important;`) that extinguishes the light beam, floor glow, and dims characters into ambient darkness.
-- **Cyberpunk Auth Form UI**:
-  - Gliding indicator arrow (`◀`) that slides smoothly between active inputs via CSS cubic-bezier transition.
-  - Floating sparkle particles (`.btn-sparkle`) around neon gradient submit buttons.
-  - Seamless Dark & Light theme overrides with Chrome `-webkit-autofill` background color protection.
 
 ---
 

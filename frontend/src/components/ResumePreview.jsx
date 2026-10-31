@@ -278,6 +278,121 @@ const ResumePreview = ({ resumeData, mode = "resume" }) => {
           </div>
         );
 
+      case "Classic":
+        return (
+          <div className="template-classic-content">
+            <div className="header-classic">
+              <h1 className="preview-name">{personalInfo.fullName || "Your Name"}</h1>
+              <h2 className="preview-headline">{personalInfo.jobTitle || "Professional Title"}</h2>
+              {renderContactInfo("contact-row centered classic-contact")}
+            </div>
+            <div className="classic-body">
+              {renderSummarySection()}
+              {renderExperienceSection()}
+              {renderEducationSection()}
+              {renderProjectsSection()}
+              {renderSkillsSection(false)}
+            </div>
+          </div>
+        );
+
+      case "Technical":
+        return (
+          <div className="template-technical-content">
+            <div className="header-technical" style={{ borderBottom: "3px solid var(--theme-color)" }}>
+              <div className="technical-header-top">
+                {renderProfileImage()}
+                <div>
+                  <h1 className="preview-name">{personalInfo.fullName || "Your Name"}</h1>
+                  <h2 className="preview-headline" style={{ color: "var(--theme-color)" }}>{personalInfo.jobTitle || "Professional Title"}</h2>
+                </div>
+              </div>
+              {renderContactInfo("contact-row technical-contact")}
+            </div>
+            <div className="technical-body">
+              {renderSkillsSection(true)}
+              {renderSummarySection()}
+              {renderExperienceSection()}
+              {renderProjectsSection()}
+              {renderEducationSection()}
+            </div>
+          </div>
+        );
+
+      case "Elegant":
+        return (
+          <div className="template-elegant-content">
+            <div className="elegant-top-bar" style={{ backgroundColor: "var(--theme-color)" }} />
+            <div className="header-elegant">
+              <div className="header-elegant-inner">
+                {renderProfileImage()}
+                <h1 className="preview-name">{personalInfo.fullName || "Your Name"}</h1>
+                <h2 className="preview-headline">{personalInfo.jobTitle || "Professional Title"}</h2>
+                {renderContactInfo("contact-row centered elegant-contact")}
+              </div>
+            </div>
+            <div className="elegant-body">
+              {renderSummarySection()}
+              {renderExperienceSection()}
+              {renderProjectsSection()}
+              {renderEducationSection()}
+              {renderSkillsSection(true)}
+            </div>
+            <div className="elegant-bottom-bar" style={{ backgroundColor: "var(--theme-color)" }} />
+          </div>
+        );
+
+      case "Compact":
+        return (
+          <div className="template-compact-content">
+            <div className="header-compact">
+              <div className="compact-header-left">
+                <h1 className="preview-name">{personalInfo.fullName || "Your Name"}</h1>
+                <h2 className="preview-headline" style={{ color: "var(--theme-color)" }}>{personalInfo.jobTitle || "Professional Title"}</h2>
+              </div>
+              <div className="compact-header-right">
+                {renderContactInfo("contact-column compact-contact")}
+              </div>
+            </div>
+            <div className="compact-body">
+              {renderSummarySection()}
+              <div className="compact-grid">
+                <div className="compact-main-col">
+                  {renderExperienceSection()}
+                  {renderProjectsSection()}
+                </div>
+                <div className="compact-side-col">
+                  {renderEducationSection()}
+                  {renderSkillsSection(true)}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "Timeline":
+        return (
+          <div className="template-timeline-content">
+            <div className="header-timeline" style={{ borderLeft: "6px solid var(--theme-color)" }}>
+              <div className="timeline-header-details">
+                <h1 className="preview-name">{personalInfo.fullName || "Your Name"}</h1>
+                <h2 className="preview-headline">{personalInfo.jobTitle || "Professional Title"}</h2>
+                {renderContactInfo("contact-row timeline-contact")}
+              </div>
+              {renderProfileImage()}
+            </div>
+            <div className="timeline-body">
+              {renderSummarySection()}
+              <div className="timeline-spine">
+                {renderExperienceSection()}
+                {renderEducationSection()}
+                {renderProjectsSection()}
+              </div>
+              {renderSkillsSection(true)}
+            </div>
+          </div>
+        );
+
       case "Modern":
       default:
         return (

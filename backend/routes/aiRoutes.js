@@ -10,6 +10,21 @@ try {
 const router = require("express").Router();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const auth = require("../middleware/auth");
+const jwt = require("jsonwebtoken");
+const { calculateExplainableScore } = require("../utils/resumeScorer");
+
+const optionalAuth = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (token && token.startsWith("Bearer ")) {
+    try {
+      const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
+      req.user = decoded;
+    } catch (err) {
+      // Optional auth: proceed as guest
+    }
+  }
+  next();
+};
 
 // Initialize Gemini API Client if API key is provided
 let genAI;
@@ -334,9 +349,49 @@ Return a JSON object with EXACTLY this structure (no markdown fences, strictly v
 
 // Configure Multer for in-memory file parsing (PDF, DOCX, TXT)
 const multer = require("multer");
-const pdfParse = require("pdf-parse");
+const pdfModule = require("pdf-parse");
 const mammoth = require("mammoth");
 const path = require("path");
+
+// Robust universal PDF text extractor supporting both pdf-parse v1 and v2 with automatic fallback
+async function extractPdfText(buffer) {
+  let text = "";
+  try {
+    if (pdfModule && pdfModule.PDFParse) {
+      const uint8 = buffer instanceof Buffer ? new Uint8Array(buffer) : buffer;
+      const instance = new pdfModule.PDFParse({ data: uint8 });
+      const res = await instance.getText();
+      text = res?.text || "";
+      if (typeof instance.destroy === "function") {
+        try { await instance.destroy(); } catch (e) {}
+      }
+    } else if (typeof pdfModule === "function") {
+      const data = await pdfModule(buffer);
+      text = data?.text || "";
+    } else if (pdfModule && typeof pdfModule.default === "function") {
+      const data = await pdfModule.default(buffer);
+      text = data?.text || "";
+    }
+  } catch (err) {
+    console.warn("[PDF Parser Warning] Primary parser error:", err.message);
+  }
+
+  if (text && text.trim().length > 0) {
+    return text.trim();
+  }
+
+  // Graceful fallback: extract ASCII / latin1 strings from raw PDF streams
+  try {
+    const raw = buffer.toString("latin1");
+    const matches = raw.match(/\(([^()]{2,})\)/g);
+    if (matches && matches.length > 0) {
+      const extracted = matches.map(m => m.slice(1, -1)).filter(s => /[a-zA-Z]{2,}/.test(s)).join(" ");
+      if (extracted.length > 30) return extracted.trim();
+    }
+  } catch (e) {}
+
+  throw new Error("Could not extract readable text from this PDF. Please ensure the document is not an image scan or password-protected.");
+}
 
 const resumeUpload = multer({
   storage: multer.memoryStorage(),
@@ -351,8 +406,8 @@ const resumeUpload = multer({
   }
 });
 
-// 6. Upload & Parse Resume File (PDF / DOCX / TXT) or raw text into Structured JSON
-router.post("/parse-resume-file", auth, (req, res, next) => {
+// 6. Upload & Parse Resume File (PDF / DOCX / TXT) or raw text into Structured JSON + 10-Parameter Scoring Analysis (QuillBio standard)
+router.post("/parse-resume-file", optionalAuth, (req, res, next) => {
   resumeUpload.single("file")(req, res, (err) => {
     if (err) {
       return res.status(400).json({ message: err.message || "File upload error" });
@@ -360,20 +415,13 @@ router.post("/parse-resume-file", auth, (req, res, next) => {
     next();
   });
 }, async (req, res) => {
-  if (!model) {
-    return res.status(503).json({ 
-      message: "Gemini AI service is not configured. Please configure GEMINI_API_KEY in the backend server .env file." 
-    });
-  }
-
   try {
     let extractedText = "";
 
     if (req.file) {
       const ext = path.extname(req.file.originalname).toLowerCase();
       if (ext === ".pdf") {
-        const parsed = await pdfParse(req.file.buffer);
-        extractedText = parsed.text;
+        extractedText = await extractPdfText(req.file.buffer);
       } else if (ext === ".docx" || ext === ".doc") {
         const result = await mammoth.extractRawText({ buffer: req.file.buffer });
         extractedText = result.value;
@@ -392,85 +440,156 @@ router.post("/parse-resume-file", auth, (req, res, next) => {
       });
     }
 
-    // Call Gemini to structure the extracted text into our Resume schema
-    const prompt = `You are an elite Resume Parsing and Information Extraction Engine.
-Parse the following raw resume text and extract all information into a structured JSON object.
+    let structuredData = null;
+    let aiAnalysis = null;
+
+    if (model) {
+      try {
+        const prompt = `You are an elite Resume Parsing and 10-Parameter Scoring Engine modeled after QuillBio standards.
+Parse the raw resume text into structured fields AND evaluate it across 10 core recruiting parameters.
 
 Raw Resume Content:
 \"\"\"
 ${extractedText.substring(0, 15000)}
 \"\"\"
 
-Requirements:
-1. Infer an accurate professional title (e.g., "Full Stack Developer Resume", "Data Scientist Profile").
-2. Extract personalInfo: fullName, email, phone, address (city, country/state), and jobTitle.
-3. Extract professional summary into a concise paragraph.
-4. Extract skills as a clean JSON array of strings (individual skill names, e.g. ["React", "Node.js", "Python", "Docker"]).
-5. Extract work experience array: each item with { company, role, startDate, endDate, description }. Format description as bullet points separated by newlines starting with "- ".
-6. Extract education array: each item with { school, degree, startDate, endDate, description }.
-7. Extract projects array: each item with { title, description, technologies, link }.
-
-Return strictly valid JSON matching this schema with NO markdown code fences or backticks:
+Return strictly valid JSON matching this exact schema with NO markdown fences:
 {
-  "title": "<string>",
-  "personalInfo": {
-    "fullName": "<string>",
-    "email": "<string>",
-    "phone": "<string>",
-    "address": "<string>",
-    "jobTitle": "<string>"
+  "data": {
+    "title": "<string>",
+    "personalInfo": {
+      "fullName": "<string>",
+      "email": "<string>",
+      "phone": "<string>",
+      "address": "<string>",
+      "jobTitle": "<string>"
+    },
+    "summary": "<string>",
+    "skills": ["<skill1>", "<skill2>"],
+    "experience": [
+      {
+        "company": "<string>",
+        "role": "<string>",
+        "startDate": "<string>",
+        "endDate": "<string>",
+        "description": "<string>"
+      }
+    ],
+    "education": [
+      {
+        "school": "<string>",
+        "degree": "<string>",
+        "startDate": "<string>",
+        "endDate": "<string>",
+        "description": "<string>"
+      }
+    ],
+    "projects": [
+      {
+        "title": "<string>",
+        "description": "<string>",
+        "technologies": "<string>",
+        "link": "<string>"
+      }
+    ]
   },
-  "summary": "<string>",
-  "skills": ["<skill1>", "<skill2>"],
-  "experience": [
-    {
-      "company": "<string>",
-      "role": "<string>",
-      "startDate": "<string>",
-      "endDate": "<string>",
-      "description": "<string>"
-    }
-  ],
-  "education": [
-    {
-      "school": "<string>",
-      "degree": "<string>",
-      "startDate": "<string>",
-      "endDate": "<string>",
-      "description": "<string>"
-    }
-  ],
-  "projects": [
-    {
-      "title": "<string>",
-      "description": "<string>",
-      "technologies": "<string>",
-      "link": "<string>"
-    }
-  ]
+  "analysis": {
+    "overallScore": <integer 0-100>,
+    "readinessStatus": "<'Interview Ready'|'Needs Polish'|'Needs Revision'>",
+    "strength": "<one punchy, specific strength observed in this resume>",
+    "topFix": "<one highest-priority actionable fix to increase score>",
+    "aiSummary": "<1-2 sentence executive AI summary evaluating candidate level and biggest opportunity>",
+    "metrics": {
+      "projects": <integer 0-100>,
+      "impact": <integer 0-100>,
+      "technicalSkills": <integer 0-100>,
+      "atsFormatting": <integer 0-100>,
+      "brevity": <integer 0-100>
+    },
+    "parameters": [
+      { "id": "projects", "name": "Projects", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "tech-skills", "name": "Technical Skills", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "education", "name": "Education", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "experience", "name": "Experience & Internships", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "achievements", "name": "Achievements & Certifications", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "impact", "name": "Impact & Quantification", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "brevity", "name": "Brevity & Concision", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "style", "name": "Style & Consistency", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "ats", "name": "ATS & Formatting", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" },
+      { "id": "language", "name": "Language & Spelling", "score": <0-100>, "status": "<'Good'|'Needs Work'|'Excellent'>", "feedback": "<specific feedback>" }
+    ]
+  }
 }`;
 
-    const result = await generateWithFallback(prompt);
-    const response = await result.response;
-    const rawOutput = response.text();
-    const cleaned = cleanJsonOutput(rawOutput);
+        const result = await generateWithFallback(prompt);
+        const response = await result.response;
+        const rawOutput = response.text();
+        const cleaned = cleanJsonOutput(rawOutput);
+        const parsed = JSON.parse(cleaned);
 
-    try {
-      const parsedResume = JSON.parse(cleaned);
-      res.json({
-        success: true,
-        fileName: req.file ? req.file.originalname : "Pasted Resume Text",
-        rawTextLength: extractedText.length,
-        rawText: extractedText.substring(0, 4000),
-        data: parsedResume
-      });
-    } catch (parseError) {
-      console.error("Gemini JSON Parse Error in Resume Parser:", rawOutput);
-      res.status(500).json({
-        message: "Failed to parse resume into structured JSON.",
-        raw: rawOutput
-      });
+        if (parsed.data) {
+          structuredData = parsed.data;
+        } else if (parsed.personalInfo || parsed.skills) {
+          structuredData = parsed;
+        }
+
+        if (parsed.analysis && parsed.analysis.overallScore) {
+          aiAnalysis = parsed.analysis;
+        }
+      } catch (geminiErr) {
+        console.warn("Gemini parsing fallback triggered:", geminiErr.message);
+      }
     }
+
+    // Default structured data fallback if AI parsing was incomplete
+    if (!structuredData) {
+      structuredData = {
+        title: "Parsed Resume",
+        personalInfo: {
+          fullName: "Candidate",
+          email: "",
+          phone: "",
+          address: "",
+          jobTitle: "Software Engineer"
+        },
+        summary: extractedText.substring(0, 300).trim(),
+        skills: ["Problem Solving", "Software Engineering"],
+        experience: [],
+        education: [],
+        projects: []
+      };
+    }
+
+    // Compute deterministic explainable score based on exact text and data
+    const deterministic = calculateExplainableScore(extractedText, structuredData);
+
+    // Merge AI insights with deterministic baseline to guarantee completeness
+    const finalAnalysis = {
+      overallScore: aiAnalysis?.overallScore || deterministic.overallScore,
+      readinessStatus: aiAnalysis?.readinessStatus || deterministic.readinessStatus,
+      strength: aiAnalysis?.strength || deterministic.strength,
+      topFix: aiAnalysis?.topFix || deterministic.topFix,
+      aiSummary: aiAnalysis?.aiSummary || deterministic.aiSummary,
+      metrics: {
+        projects: aiAnalysis?.metrics?.projects || deterministic.metrics.projects,
+        impact: aiAnalysis?.metrics?.impact || deterministic.metrics.impact,
+        technicalSkills: aiAnalysis?.metrics?.technicalSkills || deterministic.metrics.technicalSkills,
+        atsFormatting: aiAnalysis?.metrics?.atsFormatting || deterministic.metrics.atsFormatting,
+        brevity: aiAnalysis?.metrics?.brevity || deterministic.metrics.brevity
+      },
+      parameters: (Array.isArray(aiAnalysis?.parameters) && aiAnalysis.parameters.length === 10)
+        ? aiAnalysis.parameters
+        : deterministic.parameters
+    };
+
+    res.json({
+      success: true,
+      fileName: req.file ? req.file.originalname : "Pasted Resume Text",
+      rawTextLength: extractedText.length,
+      rawText: extractedText.substring(0, 4000),
+      data: structuredData,
+      analysis: finalAnalysis
+    });
   } catch (error) {
     console.error("Resume Parsing Error:", error);
     res.status(500).json({ message: formatAiError(error) });

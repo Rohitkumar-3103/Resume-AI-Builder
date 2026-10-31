@@ -78,11 +78,7 @@ function App() {
             />
             <Route 
               path="/resume-parser" 
-              element={
-                <ProtectedRoute>
-                  <ResumeParser />
-                </ProtectedRoute>
-              } 
+              element={<ResumeParser />} 
             />
             <Route path="/templates" element={<CoverTemplates />} />
             <Route path="/create" element={<CoverPageBuilder />} />
