@@ -6147,18 +6147,18 @@ body.light-theme .doc-actions-secondary-row .doc-mini-action.btn-delete:hover {
 /* ==========================================================================
    ATS BEATER & KEYWORD MATCHER
    ========================================================================== */
-.ats-beater-page, .parser-page, .coach-page, .playbook-page {
+.ats-beater-page, .parser-page, .coach-page {
   max-width: 1240px;
   margin: 0 auto;
   padding: 2rem 1.5rem 5rem;
 }
 
-.ats-hero-section, .parser-hero, .coach-hero, .playbook-hero {
+.ats-hero-section, .parser-hero, .coach-hero {
   text-align: center;
   margin-bottom: 2.5rem;
 }
 
-.ats-pill-badge, .parser-hero-badge, .coach-hero-badge, .playbook-hero-badge {
+.ats-pill-badge, .parser-hero-badge, .coach-hero-badge-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -6172,14 +6172,14 @@ body.light-theme .doc-actions-secondary-row .doc-mini-action.btn-delete:hover {
   margin-bottom: 1rem;
 }
 
-.ats-hero-section h1, .parser-hero h1, .coach-hero h1, .playbook-hero h1 {
+.ats-hero-section h1, .parser-hero h1, .coach-hero h1 h1 {
   font-size: 2.35rem;
   font-weight: 800;
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
 }
 
-.ats-hero-section p, .parser-hero p, .coach-hero p, .playbook-hero p {
+.ats-hero-section p, .parser-hero p, .coach-hero p p {
   color: var(--text-muted);
   max-width: 720px;
   margin: 0 auto;
@@ -7702,196 +7702,6 @@ body.light-theme .trust-muted {
 
 .tip-pill-item p {
   font-size: 0.85rem;
-  line-height: 1.5;
-}
-
-/* ==========================================================================
-   CAREER PLAYBOOK & POWER ACTION VERBS
-   ========================================================================== */
-.playbook-section {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-}
-
-.section-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.playbook-section h2 {
-  font-size: 1.35rem;
-  font-weight: 800;
-  margin-bottom: 0.35rem;
-}
-
-.section-subtext {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-}
-
-.verb-search-input {
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  color: var(--text-main);
-  padding: 0.55rem 1rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  width: 220px;
-}
-
-.verb-categories-nav {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
-
-.verb-cat-btn {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.verb-cat-btn:hover {
-  color: var(--text-main);
-}
-
-.verb-cat-btn.active {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: #3b82f6;
-  color: #60a5fa;
-}
-
-.verbs-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-}
-
-.verb-pill {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  color: var(--text-main);
-  padding: 0.5rem 0.95rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.verb-pill:hover {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: #3b82f6;
-  transform: translateY(-2px);
-}
-
-.verb-pill.copied {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: #10b981;
-  color: #10b981;
-}
-
-.formula-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.25rem;
-}
-
-.formula-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
-}
-
-.formula-tag {
-  background: rgba(139, 92, 246, 0.15);
-  color: #c4b5fd;
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 800;
-}
-
-.formula-structure {
-  margin: 0.85rem 0;
-}
-
-.formula-structure .lbl, .formula-example .lbl {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  font-weight: 700;
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.formula-structure p {
-  font-size: 0.88rem;
-  color: #60a5fa;
-  font-family: var(--mono);
-}
-
-.formula-example {
-  background: rgba(16, 185, 129, 0.05);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  border-radius: 8px;
-  padding: 0.75rem;
-}
-
-.formula-example p {
-  font-size: 0.85rem;
-  line-height: 1.5;
-}
-
-.rules-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.25rem;
-}
-
-.rule-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
-}
-
-.rule-badge {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #f59e0b;
-  margin-bottom: 0.5rem;
-}
-
-.rule-card h3 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-}
-
-.rule-card p {
-  font-size: 0.85rem;
-  color: var(--text-muted);
   line-height: 1.5;
 }
 

@@ -85,7 +85,6 @@ function App() {
             <Route path="/create-cover" element={<CoverPageBuilder />} />
             <Route path="/cover-page" element={<CoverPageBuilder />} />
             <Route path="/interview-coach" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/career-playbook" element={<Navigate to="/dashboard" replace />} />
             <Route 
               path="/editor/create" 
               element={

@@ -88,19 +88,13 @@ ResumeCraft empowers job seekers and students to build recruiter-grade resumes, 
 - Outlines must-hit talking points and red-flag pitfalls to avoid.
 - Provides expandable, high-scoring model answers customized to the candidate's background.
 
-### 9. 💡 Career Playbook & Power Action Verbs
-- Directory of 100+ recruiter-approved power action verbs categorized by field (*Engineering*, *Data & AI*, *Leadership*, *Product*, *Design*).
-- Click-to-copy functionality for instant integration into resumes.
-- Interactive guide to Google's XYZ formula (*"Accomplished [X] as measured by [Y] by doing [Z]"*).
-- 5 ATS compliance golden rules.
-
-### 10. 🌓 Theme Studio & Command Center
+### 9. 🌓 Theme Studio & Command Center
 - Full **Dark Mode & Light Mode** support across every component with persistent local storage.
 - Interactive Career Readiness circular gauge with live health dots and status indicators.
 - Quick search and filtering across saved resumes by all 9 template categories.
 - Color-coded action buttons for every document: **Match JD** (Emerald Green), **AI Audit** (Violet), and **Delete** (Coral Red).
 
-### 11. 🎭 Interactive Animated Character Stage & Cyberpunk Neon Auth System
+### 10. 🎭 Interactive Animated Character Stage & Cyberpunk Neon Auth System
 - **4 Expressive Characters (Purple, Pink, Yellow, Orange)**:
   - **Trigonometric Mouse Cursor Tracking**: Real-time pupil tracking across the screen using `Math.atan2`, paired with body tilts and Yellow's seesaw beak rotation.
   - **3-Tier Decoupled SVG Architecture**: Nested layers separate slide-up entrance animations, continuous organic breathing loops, and live cursor tilts so motions never conflict.

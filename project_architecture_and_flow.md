@@ -68,8 +68,7 @@ ResumeCraft (Resume AI Builder)/
     │   │   ├── CoverTemplates.jsx  # Academic CoverCraft 3-column template showcase gallery
     │   │   ├── CoverPageBuilder.jsx# Live Academic Cover Page Generator with solo/group & instant PDF export
     │   │   ├── InterviewCoach.jsx  # AI Mock Interview Coach (STAR behavioral & technical questions)
-    │   │   ├── CareerPlaybook.jsx  # 100+ action verbs directory, XYZ formulas, and ATS golden rules
-    │   │   ├── Editor.jsx          # Live split-screen visual editor (9 templates) with PDF/Word download
+        │   │   ├── Editor.jsx          # Live split-screen visual editor (9 templates) with PDF/Word download
     │   │   ├── Login.jsx           # Cyberpunk auth sign-in with interactive character stage
     │   │   └── Register.jsx        # Cyberpunk auth sign-up with interactive character stage
     │   ├── services/
@@ -263,7 +262,6 @@ The scoring system evaluates candidate resumes against 10 explicit recruiting pa
 | `POST` | `/api/ai/generate-summary` | JWT Bearer | Level-based (Fresher, Mid, Senior) summary generator |
 | `POST` | `/api/ai/generate-experience` | JWT Bearer | Position-based bullet points generator |
 | `POST` | `/api/ai/generate-cover-letter`| JWT Bearer | Tailored cover letter body generator |
-| `GET` | `/api/ai/career-playbook` | Public | 100+ power verbs, XYZ formulas, and ATS rules |
 
 ---
 

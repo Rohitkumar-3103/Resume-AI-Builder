@@ -123,10 +123,4 @@ export const getInterviewPrep = async (payload) => {
   return response.data;
 };
 
-// Career Playbook & Power Action Verbs
-export const getCareerPlaybook = async () => {
-  const response = await API.get("/ai/career-playbook");
-  return response.data;
-};
-
 export default API;
