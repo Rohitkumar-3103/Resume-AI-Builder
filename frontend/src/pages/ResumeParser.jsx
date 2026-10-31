@@ -131,7 +131,9 @@ const ResumeParser = () => {
           email: data.personalInfo?.email || "",
           phone: data.personalInfo?.phone || "",
           address: data.personalInfo?.address || "",
-          jobTitle: data.personalInfo?.jobTitle || ""
+          jobTitle: data.personalInfo?.jobTitle || "",
+          linkedin: data.personalInfo?.linkedin || "",
+          github: data.personalInfo?.github || ""
         },
         summary: data.summary || "",
         skills: Array.isArray(data.skills) ? data.skills : [],

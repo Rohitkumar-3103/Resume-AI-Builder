@@ -17,7 +17,9 @@ const defaultResumeState = {
     email: "",
     phone: "",
     address: "",
-    jobTitle: ""
+    jobTitle: "",
+    linkedin: "",
+    github: ""
   },
   summary: "",
   education: [],

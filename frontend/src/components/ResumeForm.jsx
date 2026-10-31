@@ -20,7 +20,9 @@ const ResumeForm = ({ resumeData, setResumeData, onOpenAIDetector }) => {
         email: "alex.rivera@example.com",
         phone: "+1 (555) 234-5678",
         address: "San Francisco, CA",
-        jobTitle: "Senior Full Stack Engineer"
+        jobTitle: "Senior Full Stack Engineer",
+        linkedin: "linkedin.com/in/alexrivera",
+        github: "github.com/alexrivera"
       },
       summary: "Results-driven Full Stack Engineer with 6+ years of experience building scalable web applications using React, Node.js, and MongoDB. Passionate about clean code, performance optimization, and AI integrations.",
       skills: ["React.js", "Node.js", "Express", "MongoDB", "TypeScript", "REST APIs", "Tailwind CSS", "Docker", "Git"],
@@ -504,6 +506,29 @@ const ResumeForm = ({ resumeData, setResumeData, onOpenAIDetector }) => {
                       onChange={handlePersonalChange}
                       placeholder="e.g. San Francisco, CA"
                     />
+                  </div>
+
+                  <div className="form-group-row">
+                    <div className="form-group">
+                      <label>LinkedIn Profile URL</label>
+                      <input
+                        type="text"
+                        name="linkedin"
+                        value={resumeData.personalInfo.linkedin || ""}
+                        onChange={handlePersonalChange}
+                        placeholder="e.g. linkedin.com/in/johndoe"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>GitHub Profile / Portfolio URL</label>
+                      <input
+                        type="text"
+                        name="github"
+                        value={resumeData.personalInfo.github || ""}
+                        onChange={handlePersonalChange}
+                        placeholder="e.g. github.com/johndoe"
+                      />
+                    </div>
                   </div>
                 </div>
               )}

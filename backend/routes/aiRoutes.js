@@ -462,7 +462,9 @@ Return strictly valid JSON matching this exact schema with NO markdown fences:
       "email": "<string>",
       "phone": "<string>",
       "address": "<string>",
-      "jobTitle": "<string>"
+      "jobTitle": "<string>",
+      "linkedin": "<string or empty>",
+      "github": "<string or empty>"
     },
     "summary": "<string>",
     "skills": ["<skill1>", "<skill2>"],
@@ -550,7 +552,9 @@ Return strictly valid JSON matching this exact schema with NO markdown fences:
           email: "",
           phone: "",
           address: "",
-          jobTitle: "Software Engineer"
+          jobTitle: "Software Engineer",
+          linkedin: "",
+          github: ""
         },
         summary: extractedText.substring(0, 300).trim(),
         skills: ["Problem Solving", "Software Engineering"],
